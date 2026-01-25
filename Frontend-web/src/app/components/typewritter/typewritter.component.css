@@ -1,0 +1,29 @@
+.typewriter {
+  font-size: 6rem;
+  font-weight: 600;
+  color: #539f5a;
+  /* white-space: nowrap; */
+  overflow: hidden;
+  text-align: center;
+  /* border-right: 0.1em solid #66aa6e; */
+}
+
+/* Cursor Animation */
+.cursor {
+  display: inline-block;
+  width: 0.1em;
+  margin-left: 2px;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+  25%,
+  75% {
+    opacity: 0;
+  }
+}

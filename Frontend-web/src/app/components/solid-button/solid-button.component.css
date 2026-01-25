@@ -1,0 +1,42 @@
+.solid-btn-style {
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: 2px solid transparent; /* Added to match outline button size */
+
+  /* Sage green gradient */
+  background: linear-gradient(135deg, #7fbf88, #66aa6e);
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+
+  box-shadow: 0 6px 14px rgba(102, 170, 110, 0.35);
+}
+
+.solid-btn-style:hover {
+  background: linear-gradient(135deg, #66aa6e, #539f5a);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(102, 170, 110, 0.45);
+}
+
+.solid-btn-style:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(102, 170, 110, 0.3);
+}
+
+.solid-btn-style:focus-visible {
+  outline: 3px solid rgba(127, 191, 136, 0.6);
+  outline-offset: 3px;
+}
+
+.solid-btn-style:disabled {
+  background: #c3e0c8;
+  color: #6b8e6b;
+  cursor: not-allowed;
+  box-shadow: none;
+  border: 2px solid transparent; /* match normal state */
+}
