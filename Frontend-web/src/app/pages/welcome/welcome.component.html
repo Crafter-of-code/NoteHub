@@ -3,12 +3,12 @@
     <app-solid-button
       button-one
       buttonHeading="Login"
-      [operationFunction]="loginButtonHandler"
+      (clicked)="loginButtonHandler()"
     />
     <app-outline-button
       button-two
       buttonHeading="Creaet a new Account"
-      [operationFunction]="singinButtonHandle"
+      (clicked)="singinButtonHandle()"
     />
   </app-welcome-header>
   <main class="h-[80%] w-full flex justify-center flex-col">

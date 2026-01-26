@@ -1,0 +1,45 @@
+<div class="w-full h-screen flex items-center justify-center bg-[#f2f8f4]">
+  <form class="glow-form" [formGroup]="signinForm" (ngSubmit)="signinHandler()">
+    <h2 class="text-center text-xl font-bold text-[#2c4a36]">
+      Create your account
+    </h2>
+
+    <div class="input-wrap">
+      <input type="text" placeholder="Enter your name" formControlName="name" />
+    </div>
+
+    <div class="input-wrap">
+      <input
+        type="text"
+        placeholder="Enter your email"
+        formControlName="email"
+      />
+    </div>
+
+    <div class="input-wrap">
+      <input
+        type="password"
+        placeholder="Enter your password"
+        formControlName="password"
+      />
+    </div>
+
+    <div class="input-wrap">
+      <input
+        type="password"
+        placeholder="Confirm password"
+        formControlName="confirmPassword"
+      />
+    </div>
+
+    <!-- Robot checkbox -->
+    <label class="robot-box">
+      <input type="checkbox" formControlName="checkBox" />
+      <span class="box"></span>
+      I’m not a robot
+    </label>
+    <div *ngIf="signinForm.valid">
+      <app-outline-button buttonHeading="Get started" />
+    </div>
+  </form>
+</div>

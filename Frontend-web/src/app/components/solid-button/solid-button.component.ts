@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-solid-button',
@@ -8,5 +8,9 @@ import { Component, Input } from '@angular/core';
 })
 export class SolidButtonComponent {
   @Input() buttonHeading: String = '';
-  @Input() operationFunction!: () => void;
+  // @Input() operationFunction!: () => any;
+  @Output() clicked = new EventEmitter<void>();
+  onClick() {
+    this.clicked.emit();
+  }
 }

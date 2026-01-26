@@ -1,0 +1,32 @@
+<div
+  class="w-full h-screen flex justify-center items-center form-main-container"
+>
+  <form
+    class="glow-form"
+    #userForm="ngForm"
+    (ngSubmit)="loginHandler(userForm)"
+  >
+    <div class="input-wrap">
+      <input type="text" placeholder="Username" name="name" ngModel required />
+    </div>
+
+    <div class="input-wrap">
+      <input
+        type="password"
+        placeholder="Password"
+        name="password"
+        ngModel
+        required
+      />
+    </div>
+
+    <label class="robot-box">
+      <input type="checkbox" name="checkBox" ngModel required />
+      <span class="box"></span>
+      I’m not a robot
+    </label>
+    <div class="login-button" *ngIf="userForm.valid">
+      <app-solid-button buttonHeading="Login" />
+    </div>
+  </form>
+</div>

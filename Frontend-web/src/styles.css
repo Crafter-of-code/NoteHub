@@ -4,4 +4,8 @@
   p {
     font-family: "Merriweather";
   }
+  input {
+    font-family: "Merriweather";
+    /* font-family: "Open Sans"; */
+  }
 }
