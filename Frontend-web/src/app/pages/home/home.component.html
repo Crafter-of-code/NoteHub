@@ -1,1 +1,13 @@
-<p>home works!</p>
+<main class="h-fit pr-3 pl-3">
+  <div *ngIf="allNotes?.length == 0; else log">
+    <h1>you have no notes right now</h1>
+  </div>
+  <ng-template #log>
+    <div *ngFor="let note of allNotes; elses: block" else-block>
+      <p>{{ note.id }}</p>
+      <h1>{{ note.title }}</h1>
+      <h4>{{ note.note }}</h4>
+    </div>
+    <ng-template #block> we are facing some problem </ng-template>
+  </ng-template>
+</main>

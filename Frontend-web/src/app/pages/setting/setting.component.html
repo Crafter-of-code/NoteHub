@@ -1,1 +1,53 @@
-<p>setting works!</p>
+<main class="h-fit w-screen py-5 bg-[#121212] flex justify-center items-center">
+  <div
+    class="main_container flex flex-col items-center gap-4 sm:w-1/2 max-sm:mx-5"
+  >
+    <!-- Profile Image -->
+    <div id="image_container">
+      <img [src]="image" alt="userImage" height="200" width="200" />
+    </div>
+    <!---->
+    <div class="w-full flex flex-wrap">
+      <div id="field_1_name" class="w-full my-1">
+        <app-outline-button>
+          <div
+            class="flex flex-col justify-between items-center w-full px-4 py-2"
+          >
+            <div class="flex flex-col">
+              <h1>Name</h1>
+              <p>{{ user.name }}</p>
+            </div>
+            <app-solid-button buttonHeading="Change" />
+          </div>
+        </app-outline-button>
+      </div>
+
+      <!-- Email Field -->
+      <div id="field_2_email" class="w-full my-1">
+        <app-outline-button>
+          <div class="flex justify-between items-center w-full flex-col">
+            <div class="flex flex-col justify-between items-center w-full">
+              <h1>Email</h1>
+              <p>{{ user.email }}</p>
+            </div>
+            <app-solid-button buttonHeading="Change" />
+          </div>
+        </app-outline-button>
+      </div>
+
+      <!-- Password Field -->
+      <div id="field_3_password" class="w-full my-1">
+        <app-outline-button>
+          <div class="flex justify-between items-center w-full flex-col">
+            <div class="flex flex-col items-center justify-between w-full">
+              <h1>Password</h1>
+              <p>********</p>
+            </div>
+            <app-solid-button buttonHeading="Change" />
+          </div>
+        </app-outline-button>
+      </div>
+    </div>
+    <!-- Name Field -->
+  </div>
+</main>

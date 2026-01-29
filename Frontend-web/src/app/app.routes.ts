@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { SigninComponent } from './pages/auth/signin/signin.component';
 import { LayoutComponent } from './pages/layout/layout.component';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
 
@@ -17,7 +16,10 @@ export const routes: Routes = [
   },
   {
     path: 'signin',
-    component: SigninComponent,
+    loadComponent: () =>
+      import('./pages/auth/signin/signin.component').then(
+        (page) => page.SigninComponent
+      ),
   },
   {
     path: 'home',

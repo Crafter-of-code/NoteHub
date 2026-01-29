@@ -1,0 +1,12 @@
+<header
+  class="sticky top-0 h-20 flex items-center justify-between flex-wrap bg-white"
+>
+  <div class="mr-3 ml-3">
+    <h1 class="text-3xl select-none">{{ appHeading }}</h1>
+  </div>
+  <div class="mr-3 ml-3">
+    <app-outline-button (clicked)="button_click()">
+      <img [src]="imageUrl" height="17" width="17" />
+    </app-outline-button>
+  </div>
+</header>

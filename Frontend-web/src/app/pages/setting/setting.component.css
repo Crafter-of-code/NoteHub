@@ -1,0 +1,61 @@
+/* Card container */
+.main_container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* smaller gap */
+  padding: 1rem 1rem; /* less padding */
+  background: #1c1c1c;
+  border-radius: 16px; /* slightly smaller */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  overflow-x: hidden;
+}
+
+/* Profile image */
+#image_container img {
+  width: 150px; /* smaller */
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #2d2d2d;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#image_container img:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.08);
+}
+
+/* Field content padding */
+app-outline-button div {
+  padding: 0.75rem 1rem; /* smaller padding */
+  border-radius: 12px;
+}
+
+/* Text sizes */
+h1 {
+  font-size: 1.2rem; /* smaller */
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.2rem;
+}
+
+p {
+  font-size: 0.85rem; /* smaller */
+  color: #b5b5b5;
+}
+
+/* Change button */
+.change-button {
+  padding: 0.3rem 0.7rem;
+  background: #2d2d2d;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.change-button:hover {
+  background: #3c3c3c;
+  transform: translateY(-1px);
+}
