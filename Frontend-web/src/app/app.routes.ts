@@ -22,7 +22,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'home',
+    path: ':id',
     component: LayoutComponent,
     children: [
       {

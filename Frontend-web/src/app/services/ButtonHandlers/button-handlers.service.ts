@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Route, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ButtonHandlersService {
   constructor(private router: Router) {}
-  welcomePageLoginButtonHandler() {
-    this.router.navigate(['/login']);
+  initizalHeaderButton: boolean = false;
+  goToLoginPage() {
+    this.router.navigate(['login']);
+  }
+  goToSiginPage() {
+    this.router.navigate(['signin']);
+  }
+  getToSettingPage() {
+    this.router.navigate(['home', 'setting']);
   }
 }

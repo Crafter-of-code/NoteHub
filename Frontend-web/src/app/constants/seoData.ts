@@ -3,11 +3,7 @@ type seoStructure = {
   description?: string;
   keyword?: string;
 };
-export const welcomePageSeo: seoStructure = {
-  title: '',
-  description: '',
-  keyword: '',
-};
+
 export const loginPageSeo: seoStructure = {
   title: 'Secure Login to Access Your Notes | NoteHub',
   description:
@@ -29,4 +25,18 @@ export const homePageSeo: seoStructure = {
   keyword:
     'online notes, note management, text notes app, organize notes, edit notes online, digital notebook, productivity tools, note keeping app, note dashboard, note organizer',
 };
-// import { loginPageSeo } from '../../../constants/seoData';
+export const welcomePageSeo: seoStructure = {
+  title: 'Welcome to NoteHub | Simple & Secure Note Taking App',
+  description:
+    'Welcome to NoteHub, a simple and secure note-taking platform designed to help you capture, organize, and manage your ideas effortlessly. Start writing, editing, and storing your notes online with ease and boost your productivity today.',
+  keyword:
+    'note taking app, online notes app, digital notebook, secure notes platform, productivity notes, write notes online, manage notes easily, personal notes app, NoteHub welcome',
+};
+
+export const settingPageSeo: seoStructure = {
+  title: 'Account Settings & Preferences | NoteHub',
+  description:
+    'Manage your NoteHub account settings and preferences with ease. Update your profile, customize your experience, and control your note management options securely from one place.',
+  keyword:
+    'note app settings, account settings, user preferences, manage note account, profile settings, secure account management, NoteHub settings, customize notes app',
+};

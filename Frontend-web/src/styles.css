@@ -1,12 +1,10 @@
 @import "tailwindcss";
 * {
-  font-family: "Montserrat", sans-serif;
-  /* overflow-x: hidden !important; */
+  font-family: "Montserrat", sans-serif, system-ui;
   p {
     font-family: "Lato";
   }
   input {
-    font-family: "Roboto", sans-serif;
-    /* font-family: "Open Sans"; */
+    font-family: "Roboto", sans-serif, system-ui;
   }
 }
