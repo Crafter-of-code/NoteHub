@@ -22,7 +22,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: ':id',
+    path: 'home',
     component: LayoutComponent,
     children: [
       {
@@ -40,5 +40,12 @@ export const routes: Routes = [
           ),
       },
     ],
+  },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./pages/not-found/not-found.component').then(
+        (page) => page.NotFoundComponent
+      ),
   },
 ];
