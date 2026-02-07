@@ -1,6 +1,12 @@
 import React from 'react';
-import Routing from './Routing';
+import StackNavigation from './Navigation/StackNavigation';
+import { NavigationContainer } from '@react-navigation/native';
+import LinearGradient from 'react-native-linear-gradient';
 const Layout = (): React.ReactElement => {
-  return <Routing />;
+  return (
+    <NavigationContainer>
+      <StackNavigation />
+    </NavigationContainer>
+  );
 };
 export default Layout;

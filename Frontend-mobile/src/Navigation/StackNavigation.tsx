@@ -1,8 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import Welcome from '../Pages/Welcome';
-import Login from '../Pages/Auth/Login';
-import Signin from '../Pages/Auth/Signin';
+import Welcome from '../screens/Welcome';
+import Login from '../screens/Auth/Login';
+import Signin from '../screens/Auth/Signin';
 export type stackParamList = {
   welcome: undefined;
   login: undefined;
@@ -11,7 +11,12 @@ export type stackParamList = {
 const stack = createStackNavigator<stackParamList>();
 const StackNavigation = (): React.ReactElement => {
   return (
-    <stack.Navigator initialRouteName="welcome">
+    <stack.Navigator
+      initialRouteName="welcome"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <stack.Screen name="welcome" component={Welcome} />
       <stack.Screen name="login" component={Login} />
       <stack.Screen name="signin" component={Signin} />
