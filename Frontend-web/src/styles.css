@@ -1,7 +1,16 @@
 @import "tailwindcss";
 * {
-  font-family: "Open Sans";
+  font-family: "Montserrat", sans-serif, system-ui;
   p {
-    font-family: "Merriweather";
+    font-family: "Lato";
+  }
+  input {
+    font-family: "Roboto", sans-serif, system-ui;
+  }
+}
+
+@layer utilities {
+  .clip-hexagon {
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   }
 }

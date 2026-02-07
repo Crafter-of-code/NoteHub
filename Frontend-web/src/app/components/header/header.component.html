@@ -1,0 +1,20 @@
+<header
+  class="sticky top-0 h-20 flex items-center justify-between flex-wrap bg-zinc-900 border-b border-zinc-800 px-4 z-50"
+>
+  <div class="mr-3 ml-3">
+    <h1 class="text-3xl select-none text-zinc-100 font-semibold tracking-tight">
+      <a [routerLink]="['/']" class="hover:text-[#66aa6e] transition">
+        {{ appHeading }}
+      </a>
+    </h1>
+  </div>
+  <div class="mr-3 ml-3">
+    <app-outline-button
+      (clicked)="button_click()"
+      class="border border-none text-zinc-100 hover:border-[#66aa6e] hover:text-[#66aa6e] transition"
+      aria-label="go to setting"
+    >
+      <img [src]="imageUrl" height="17" width="17" alt="setting" />
+    </app-outline-button>
+  </div>
+</header>

@@ -1,0 +1,110 @@
+.glow-form {
+  width: 100%;
+  max-width: 360px;
+  padding: 26px;
+  border-radius: 14px;
+
+  background: linear-gradient(180deg, #f4fbf6, #eaf6ee);
+  box-shadow: 0 18px 40px rgba(102, 170, 110, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Input wrapper for glow */
+.input-wrap {
+  position: relative;
+}
+
+/* Inputs */
+.glow-form input[type="text"],
+.glow-form input[type="password"] {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 10px;
+
+  border: 2px solid transparent;
+  background: linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(135deg, #7fbf88, #66aa6e) border-box;
+
+  font-size: 15px;
+  font-weight: 600;
+  color: #2c4a36;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Hover = lift like button */
+.glow-form input:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(102, 170, 110, 0.25);
+}
+
+/* Focus = glow */
+.glow-form input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(127, 191, 136, 0.45),
+    0 8px 20px rgba(102, 170, 110, 0.35);
+}
+
+.glow-form input::placeholder {
+  color: #8bbf98;
+}
+
+/* --- Robot checkbox --- */
+.robot-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #2f4f3a;
+
+  cursor: pointer;
+}
+
+.robot-box input {
+  display: none;
+}
+
+/* Checkbox box */
+.robot-box .box {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+
+  background: linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(135deg, #7fbf88, #66aa6e) border-box;
+  border: 2px solid transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 4px 10px rgba(102, 170, 110, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.robot-box:hover .box {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(102, 170, 110, 0.35);
+}
+
+.robot-box input:checked + .box {
+  background: linear-gradient(135deg, #7fbf88, #66aa6e);
+}
+
+.robot-box input:checked + .box::after {
+  content: "✓";
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* Button spacing */
+.glow-form button {
+  margin-top: 10px;
+}

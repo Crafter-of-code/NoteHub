@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { SigninComponent } from './auth/signin/signin.component';
 import { LayoutComponent } from './pages/layout/layout.component';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
 
@@ -11,13 +10,16 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () =>
-      import('./auth/login/login.component').then(
+      import('./pages/auth/login/login.component').then(
         (comp) => comp.LoginComponent
       ),
   },
   {
     path: 'signin',
-    component: SigninComponent,
+    loadComponent: () =>
+      import('./pages/auth/signin/signin.component').then(
+        (page) => page.SigninComponent
+      ),
   },
   {
     path: 'home',
@@ -38,5 +40,12 @@ export const routes: Routes = [
           ),
       },
     ],
+  },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./pages/not-found/not-found.component').then(
+        (page) => page.NotFoundComponent
+      ),
   },
 ];

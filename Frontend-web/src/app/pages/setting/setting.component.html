@@ -1,1 +1,62 @@
-<p>setting works!</p>
+<main
+  class="min-h-[calc(91.5vh-5rem)] py-8 bg-linear-to-br from-zinc-950 via-zinc-900 to-black text-zinc-100 flex justify-center items-start max-sm:h-fit"
+>
+  <div
+    class="main_container flex flex-col items-center gap-6 sm:w-1/2 max-sm:mx-5"
+  >
+    <div
+      id="image_container"
+      class="w-44 h-44 rounded-full overflow-hidden border-2 border-zinc-800 shadow-md flex items-center justify-center"
+    >
+      <img
+        [src]="userImage"
+        alt="User profile image"
+        class="w-full h-full object-cover"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+
+    <div class="w-full flex flex-col gap-4">
+      <div
+        id="field_1_name"
+        class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-4 flex justify-between items-center hover:border-[#66aa6e] transition flex-wrap max-sm:justify-center"
+      >
+        <div class="flex flex-col">
+          <h2 class="text-zinc-100 font-semibold text-lg max-sm:text-center">
+            Name
+          </h2>
+          <p class="text-zinc-400 max-sm:text-center">{{ user.name }}</p>
+        </div>
+        <app-solid-button buttonHeading="Change" />
+      </div>
+      <div
+        id="field_2_email"
+        class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-4 flex justify-between items-center hover:border-[#66aa6e] transition flex-wrap max-sm:justify-center"
+      >
+        <div class="flex flex-col">
+          <h2 class="text-zinc-100 font-semibold text-lg max-sm:text-center">
+            Email
+          </h2>
+          <p class="text-zinc-400 max-sm:text-center">
+            {{ user.email }}
+          </p>
+        </div>
+        <app-solid-button buttonHeading="Change" />
+      </div>
+
+      <div
+        id="field_3_password"
+        class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-4 flex justify-between items-center hover:border-[#66aa6e] transition flex-wrap max-sm:justify-center"
+      >
+        <div class="flex flex-col">
+          <h2 class="text-zinc-100 font-semibold text-lg max-sm:text-center">
+            Password
+          </h2>
+          <p class="text-zinc-400 max-sm:text-center">********</p>
+        </div>
+        <app-solid-button buttonHeading="Change" />
+      </div>
+    </div>
+  </div>
+</main>

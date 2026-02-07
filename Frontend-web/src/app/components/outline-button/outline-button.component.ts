@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-outline-button',
@@ -9,4 +9,8 @@ import { Component, Input } from '@angular/core';
 export class OutlineButtonComponent {
   @Input() buttonHeading: String = '';
   @Input() operationFunction!: () => void;
+  @Output() clicked = new EventEmitter<void>();
+  onClick() {
+    this.clicked.emit();
+  }
 }

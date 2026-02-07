@@ -1,23 +1,56 @@
-<div class="h-[100vh]">
-  <app-welcome-header>
-    <app-solid-button
-      button-one
-      buttonHeading="Login"
-      [operationFunction]="loginButtonHandler"
-    />
-    <app-outline-button
-      button-two
-      buttonHeading="Creaet a new Account"
-      [operationFunction]="singinButtonHandle"
-    />
-  </app-welcome-header>
-  <main class="h-[80%] w-full flex justify-center flex-col">
-    <div class="mr-2 ml-2">
-      <app-typewritter message="Note Hub" />
+<div class="h-screen">
+  <main
+    class="min-h-screen w-full flex flex-col items-center justify-center bg-linear-to-br from-zinc-950 via-zinc-900 to-black px-6 text-zinc-100"
+  >
+    <div class="mb-4">
+      <app-typewritter
+        [message]="appHeading"
+        class="text-4xl md:text-6xl font-semibold tracking-tight text-center"
+      />
     </div>
-    <p class="text-center">
-      NoteHub is a solo, cross-platform note-taking application designed to help
-      users organize ideas and stay productive across web and mobile platforms.
+    <p class="max-w-2xl text-center text-zinc-400 text-lg mb-10">
+      A secure note-taking system to create, edit, and manage your notes. Stay
+      organized with fast access across all your devices.
     </p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mb-12">
+      <div
+        class="bg-zinc-900 border border-zinc-800 rounded-lg p-6 text-center hover:border-zinc-700 transition"
+      >
+        <h3 class="text-lg font-medium mb-2">📝 Create & Edit</h3>
+        <p class="text-zinc-400 text-sm">
+          Add, update, and delete notes easily with a distraction-free editor.
+        </p>
+      </div>
+
+      <div
+        class="bg-zinc-900 border border-zinc-800 rounded-lg p-6 text-center hover:border-zinc-700 transition"
+      >
+        <h3 class="text-lg font-medium mb-2">🔐 Secure Access</h3>
+        <p class="text-zinc-400 text-sm">
+          Sign up and log in securely to keep your notes private and protected.
+        </p>
+      </div>
+
+      <div
+        class="bg-zinc-900 border border-zinc-800 rounded-lg p-6 text-center hover:border-zinc-700 transition"
+      >
+        <h3 class="text-lg font-medium mb-2">⚡ Fast & Reliable</h3>
+        <p class="text-zinc-400 text-sm">
+          Optimized for speed so your notes are always just one click away.
+        </p>
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <app-solid-button
+        button-one
+        buttonHeading="Login"
+        (clicked)="loginButtonHandler()"
+      />
+      <app-outline-button
+        button-two
+        buttonHeading="Creaet a new Account"
+        (clicked)="singinButtonHandle()"
+      />
+    </div>
   </main>
 </div>
