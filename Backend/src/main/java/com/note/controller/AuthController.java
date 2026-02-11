@@ -2,19 +2,22 @@ package com.note.controller;
 
 import com.note.entity.UserEntitiy;
 import com.note.model.LoginUserModel;
-import com.note.model.SigninDataModel;
+import com.note.responseModel.SigninReponseModel;
 import com.note.services.AuthService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("api")
 public class AuthController {
+//    private SigninReponseModel signinReponseModel;
     AuthService authService;
-    AuthController(AuthService authService){
+    AuthController(AuthService authService,SigninReponseModel signinReponseModel, UserEntitiy userEntitiy){
         this.authService = authService;
+//        this.signinReponseModel = signinReponseModel;
     }
     @GetMapping("/signin")
     public String singnHandler(){
@@ -28,8 +31,12 @@ public class AuthController {
 
     }
     @PostMapping("/signin")
-    public String Signin(@ModelAttribute UserEntitiy data) {
-        return authService.signIn(data);
+    public ResponseEntity<SigninReponseModel> Signin(@RequestBody Map<String,Object> data) {
+        UserEntitiy userEntitiy = new UserEntitiy();
+        userEntitiy.setUserName((String) data.get("userName"));
+        userEntitiy.setUserPassword((String) data.get("userPassword"));
+        userEntitiy.setUserEmail((String) data.get("userEmail"));
+        return  ResponseEntity.ok().body(authService.signIn(userEntitiy));
     }
     @GetMapping("/logout")
     public ResponseEntity<?> logout(){

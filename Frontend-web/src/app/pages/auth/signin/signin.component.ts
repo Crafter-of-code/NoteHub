@@ -9,28 +9,75 @@ import {
 import { CommonModule } from '@angular/common';
 import { SetSeoService } from '../../../services/seo/set-seo.service';
 import { singinPageSeo } from '../../../constants/seoData';
+import { HttpService } from '../../../services/http/http.service';
+import { ResponseStatusComponent } from '../../../components/response-status/response-status.component';
 
 @Component({
   selector: 'app-signin',
-  imports: [OutlineButtonComponent, ReactiveFormsModule, CommonModule],
+  imports: [
+    OutlineButtonComponent,
+    ReactiveFormsModule,
+    CommonModule,
+    ResponseStatusComponent,
+  ],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.css',
 })
 export class SigninComponent implements OnInit {
-  constructor(private seo: SetSeoService) {}
+  button_disable: Boolean = false;
+  reponseStatus = false;
+  reponseMessage = '';
+  constructor(private seo: SetSeoService, private http: HttpService) {}
   ngOnInit(): void {
     this.seo.setSeo(singinPageSeo);
   }
   signinForm: FormGroup = new FormGroup({
-    name: new FormControl('', Validators.required),
-    email: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
+    name: new FormControl('', {
+      validators: [Validators.required],
+    }),
+    email: new FormControl('', {
+      validators: [Validators.required, Validators.email],
+    }),
+    password: new FormControl('', {
+      validators: [Validators.required],
+    }),
     confirmPassword: new FormControl('', Validators.required),
     checkBox: new FormControl(false, Validators.required),
   });
   signinHandler() {
+    this.button_disable = false;
     if (this.signinForm.valid) {
-      console.log(this.signinForm.value);
+      if (
+        this.signinForm.get('password')?.value !=
+        this.signinForm.get('confirmPassword')?.value
+      ) {
+        console.error('you password is not same');
+        this.signinForm.invalid;
+      } else {
+        const data = {
+          userName: this.signinForm.get('name')?.value,
+          userEmail: this.signinForm.get('email')?.value,
+          userPassword: this.signinForm.get('password')?.value,
+        };
+        this.http.signIn(data).subscribe({
+          next: (data) => {
+            this.reponseStatus = data.errorStatus;
+            this.reponseMessage = data.message;
+            this.button_disable = false;
+            setTimeout(() => {
+              this.reponseStatus = false;
+              this.reponseMessage = '';
+            }, 2000);
+          },
+          error: (data) => {
+            this.reponseMessage = 'problem while communicating to the backed';
+            this.button_disable = false;
+            setTimeout(() => {
+              this.reponseMessage = '';
+            }, 3000);
+          },
+        });
+      }
     } else {
       console.log('yourm form is not valid');
     }

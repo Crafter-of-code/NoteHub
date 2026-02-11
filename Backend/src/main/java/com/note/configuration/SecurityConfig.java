@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/signin/**", "/api/login")
+                        .requestMatchers("/api/signin/**", "/api/login","/api/welcome")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
@@ -47,7 +47,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(List.of("*"));
+        corsConfig.setAllowedOrigins(List.of("http://localhost:4200/"));
+        corsConfig.setAllowedOriginPatterns(List.of("*"));
         corsConfig.setAllowedMethods(
                 List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
         corsConfig.setAllowedHeaders(List.of("*"));

@@ -5,6 +5,7 @@ package com.note.services;
 import com.note.entity.UserEntitiy;
 import com.note.model.LoginUserModel;
 import com.note.repository.UserRepository;
+import com.note.responseModel.SigninReponseModel;
 import com.note.utility.JwtUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,11 +16,15 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private UserRepository userRepository;
     private JwtUtil jwtUtil;
-
-    AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    private SigninReponseModel signinReponseModel;
+    AuthService(UserRepository userRepository,
+                PasswordEncoder passwordEncoder,
+                JwtUtil jwtUtil,
+                SigninReponseModel signinReponseModel) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
+        this.signinReponseModel = signinReponseModel;
     }
 
     public String login(LoginUserModel data) {
@@ -37,15 +42,19 @@ public class AuthService {
         return "there is some problem in the server";
     }
 
-    public String signIn(UserEntitiy data) {
+    public SigninReponseModel signIn(UserEntitiy data) {
         try {
             String password = passwordEncoder.encode(data.getUserPassword());
             data.setUserPassword(password);
             userRepository.save(data);
         } catch (Exception e) {
-            System.out.println("There is an exception");
-            return "There is an exception in singIn post request";
+            System.out.println(e);
+            signinReponseModel.setErrorStatus(true);
+            signinReponseModel.setMessage("User with this email is already present");
+            return signinReponseModel;
         }
-        return "The user has been saved successfully";
+        signinReponseModel.setErrorStatus(false);
+        signinReponseModel.setMessage("You signed in successfully");
+        return signinReponseModel;
     }
 }

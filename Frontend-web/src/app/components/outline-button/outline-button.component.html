@@ -1,5 +1,5 @@
 <div class="ml-1 mr-1">
-  <button class="outline-btn-style" (click)="onClick()">
+  <button class="outline-btn-style" (click)="onClick()" [disabled]="disabled">
     {{ buttonHeading }}
     <ng-content />
   </button>
