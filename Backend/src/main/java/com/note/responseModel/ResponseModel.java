@@ -3,7 +3,7 @@ package com.note.responseModel;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SigninReponseModel {
+public class ReponseModel {
     private Boolean errorStatus;
     private String message;
 
