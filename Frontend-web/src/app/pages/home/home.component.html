@@ -1,46 +1,73 @@
+<aside class="fixed top-0 flex w-screen justify-center z-999">
+  <app-response-status [status]="errorStatus" [message]="reponseMessage" />
+</aside>
 <main
-  class="min-h-screen px-4 py-6 bg-linear-to-br from-zinc-950 via-zinc-900 to-black text-zinc-100"
+  class="h-[calc(90vh-1.1rem)] bg-linear-to-br from-zinc-950 via-zinc-900 to-black text-zinc-100"
+  *ngIf="add_note; else showNote"
 >
-  <div
-    *ngIf="allNotes?.length === 0; else notesGrid"
-    class="flex items-center justify-center h-[calc(91.5vh-5rem)]"
+  <app-add-note />
+</main>
+<ng-template #showNote>
+  <main
+    class="min-h-[calc(90vh-1.1rem)] px-4 py-6 bg-linear-to-br from-zinc-950 via-zinc-900 to-black text-zinc-100"
   >
-    <h1 class="text-xl tracking-wide text-zinc-400">
-      You have no notes right now
-    </h1>
-  </div>
-  <ng-template #notesGrid>
     <div
-      class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6 space-y-6"
+      *ngIf="allNotes?.length === 0; else notesGrid"
+      class="flex items-center justify-center h-[calc(90vh-6rem)]"
     >
+      <h1 class="text-xl tracking-wide text-zinc-400 select-none text-center">
+        You have no notes right now
+      </h1>
+    </div>
+    <ng-template #notesGrid>
       <div
-        *ngFor="let note of allNotes"
-        class="relative break-inside-avoid bg-zinc-900 border border-zinc-800 rounded-lg p-5 hover:border-[#66aa6e] transition cursor-pointer shadow-sm"
+        class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6 space-y-6"
       >
-        <div class="absolute top-2 right-2 flex gap-2">
-          <button
-            (click)="editButtonHandler(note.id)"
-            class="w-6 h-6 flex items-center justify-center rounded-md hover:bg-zinc-800 transition"
-            type="button"
-            aria-label="click to edit"
-          >
-            <img [src]="editIcon" alt="Edit" class="w-4 h-4" />
-          </button>
-          <button
-            class="w-6 h-6 flex items-center justify-center rounded-md hover:bg-zinc-800 transition"
-            type="button"
-            aria-label="click to delete"
-            (click)="deleteButtonHandler(note.id)"
-          >
-            <img [src]="deleteIcon" alt="Delete" class="w-6 h-6" />
-          </button>
-        </div>
-        <div class="flex flex-col gap-2">
-          <span class="text-sm text-zinc-400"></span>
-          <h2 class="text-lg font-semibold text-zinc-100">{{ note.title }}</h2>
-          <p class="text-zinc-300 text-sm">{{ note.note }}</p>
+        <div
+          *ngFor="let note of allNotes"
+          class="relative break-inside-avoid bg-zinc-900 border border-zinc-800 rounded-lg p-5 hover:border-[#66aa6e] transition cursor-pointer shadow-sm"
+        >
+          <div class="absolute top-2 right-2 flex gap-2">
+            <button
+              (click)="editButtonHandler(note.noteId)"
+              class="w-6 h-6 flex items-center justify-center rounded-md hover:bg-zinc-800 transition"
+              type="button"
+              aria-label="click to edit"
+            >
+              <img [src]="editIcon" alt="Edit" class="w-4 h-4" />
+            </button>
+            <button
+              class="w-6 h-6 flex items-center justify-center rounded-md hover:bg-zinc-800 transition"
+              type="button"
+              aria-label="click to delete"
+              (click)="deleteButtonHandler(note.noteId)"
+            >
+              <img [src]="deleteIcon" alt="Delete" class="w-6 h-6" />
+            </button>
+          </div>
+          <div class="flex flex-col gap-2">
+            <span class="text-sm text-zinc-400"></span>
+            <h2 class="text-lg font-semibold text-zinc-100">
+              {{ note.noteTitle }}
+            </h2>
+            <p class="text-zinc-300 text-sm">{{ note.noteContent }}</p>
+          </div>
         </div>
       </div>
-    </div>
-  </ng-template>
-</main>
+    </ng-template>
+  </main></ng-template
+>
+
+<div class="fixed bottom-20 right-2">
+  <app-solid-button (clicked)="button_clicked()">
+    <img
+      src="/asset/close.png"
+      width="30"
+      height="30"
+      *ngIf="add_note; else showCross"
+    />
+    <ng-template #showCross
+      ><img src="/asset/add.png" width="30" height="30" />
+    </ng-template>
+  </app-solid-button>
+</div>

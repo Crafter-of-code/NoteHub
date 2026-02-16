@@ -10,7 +10,7 @@ export class OutlineButtonComponent {
   @Input() buttonHeading: String = '';
   @Input() operationFunction!: () => void;
   @Output() clicked = new EventEmitter<void>();
-  @Input() disabled: Boolean = true;
+  @Input() disabled: Boolean = false;
   onClick() {
     this.clicked.emit();
   }

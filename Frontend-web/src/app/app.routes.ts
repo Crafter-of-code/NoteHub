@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './pages/layout/layout.component';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,8 @@ export const routes: Routes = [
           import('./pages/home/home.component').then(
             (page) => page.HomeComponent
           ),
+        // redirectTo: '/not-found',
+        // pathMatch: 'full',
       },
       {
         path: 'setting',
@@ -39,13 +42,30 @@ export const routes: Routes = [
             (page) => page.SettingComponent
           ),
       },
+      {
+        path: ':id',
+        // loadComponent: () =>
+        //   import('./pages/home/home.component').then(
+        //     (page) => page.HomeComponent
+        //   ),
+        children: [
+          // {
+          //   path: 'setting',
+          //   loadComponent: () =>
+          //     import('./pages/setting/setting.component').then(
+          //       (page) => page.SettingComponent
+          //     ),
+          // },
+        ],
+      },
     ],
   },
   {
+    path: 'not-found',
+    component: NotFoundComponent,
+  },
+  {
     path: '**',
-    loadComponent: () =>
-      import('./pages/not-found/not-found.component').then(
-        (page) => page.NotFoundComponent
-      ),
+    redirectTo: 'not-found',
   },
 ];

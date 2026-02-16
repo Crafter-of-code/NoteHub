@@ -33,7 +33,8 @@ export class HeaderComponent implements OnInit {
     } else {
       this.clicked = !this.clicked;
       this.imageUrl = 'asset/home.png';
-      this.route.navigate(['1', 'setting']);
+      console.log('going to setting page');
+      this.route.navigate(['home', 'setting']);
     }
   }
 }

@@ -5,9 +5,8 @@ package com.note.services;
 import com.note.entity.UserEntitiy;
 import com.note.model.LoginUserModel;
 import com.note.repository.UserRepository;
-import com.note.responseModel.SigninReponseModel;
+import com.note.responseModel.ResponseModel;
 import com.note.utility.JwtUtil;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,45 +15,56 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private UserRepository userRepository;
     private JwtUtil jwtUtil;
-    private SigninReponseModel signinReponseModel;
+    private ResponseModel responseModel;
     AuthService(UserRepository userRepository,
                 PasswordEncoder passwordEncoder,
                 JwtUtil jwtUtil,
-                SigninReponseModel signinReponseModel) {
+                ResponseModel responseModel) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
-        this.signinReponseModel = signinReponseModel;
+        this.responseModel = responseModel;
     }
 
-    public String login(LoginUserModel data) {
+    public ResponseModel login(LoginUserModel data) {
+//    ResponseModel rm = new ResponseModel();
         try {
             UserEntitiy userData = userRepository.findByUserEmail(data.getUserEmail()).orElseThrow(() -> new RuntimeException("user not found"));
             Boolean resultOfPasswordMatching = passwordEncoder.matches(data.getUserPassword(), userData.getUserPassword());
             if (resultOfPasswordMatching) {
-                return jwtUtil.generateToken(userData.getUserEmail());
+                ResponseModel rm = new ResponseModel();
+                rm.setErrorStatus(false);
+                rm.setUserId(userData.getUserId());
+                rm.setMessage("You singined in successfully");
+                rm.setToken(jwtUtil.generateToken(userData.getUserEmail()));
+                return rm;
             } else {
-                return "you are not the part of this ";
+                ResponseModel rm = new ResponseModel();
+                rm.setMessage("Your password is wrong");
+                rm.setErrorStatus(true);
+                return rm;
             }
         } catch (Exception e) {
             System.out.println(e);
         }
-        return "there is some problem in the server";
+        responseModel.setMessage("some thing went wrong");
+        responseModel.setErrorStatus(true);
+        return responseModel;
     }
 
-    public SigninReponseModel signIn(UserEntitiy data) {
+    public ResponseModel signIn(UserEntitiy data) {
         try {
             String password = passwordEncoder.encode(data.getUserPassword());
             data.setUserPassword(password);
             userRepository.save(data);
         } catch (Exception e) {
             System.out.println(e);
-            signinReponseModel.setErrorStatus(true);
-            signinReponseModel.setMessage("User with this email is already present");
-            return signinReponseModel;
+            responseModel.setErrorStatus(true);
+            responseModel.setMessage("User with this email is already present");
+            return responseModel;
         }
-        signinReponseModel.setErrorStatus(false);
-        signinReponseModel.setMessage("You signed in successfully");
-        return signinReponseModel;
+        responseModel.setErrorStatus(false);
+        responseModel.setMessage("You signed in successfully");
+        return responseModel;
     }
 }

@@ -2,9 +2,9 @@ package com.note.controller;
 
 import com.note.entity.UserEntitiy;
 import com.note.model.LoginUserModel;
-import com.note.responseModel.SigninReponseModel;
+import com.note.responseModel.ResponseModel;
 import com.note.services.AuthService;
-import org.springframework.http.ResponseCookie;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,25 +13,24 @@ import java.util.Map;
 @RestController
 @RequestMapping("api")
 public class AuthController {
-//    private SigninReponseModel signinReponseModel;
+//    private ResponseModel signinReponseModel;
     AuthService authService;
-    AuthController(AuthService authService,SigninReponseModel signinReponseModel, UserEntitiy userEntitiy){
+    AuthController(AuthService authService, ResponseModel responseModel, UserEntitiy userEntitiy){
         this.authService = authService;
-//        this.signinReponseModel = signinReponseModel;
+//        this.responseModel = responseModel;
     }
     @GetMapping("/signin")
     public String singnHandler(){
         return "this is the signin get route";
     }
     @PostMapping("/login")
-    public ResponseEntity<String> login(@ModelAttribute LoginUserModel data){
-        String token =  authService.login(data);
-        ResponseCookie setCookie = ResponseCookie.from("jwt",token).httpOnly(true).secure(true).build();
-        return  ResponseEntity.ok().header("Authorization","Bearer "+token) .body(token);
+    public ResponseEntity<ResponseModel> login(@RequestBody LoginUserModel data){
+        System.out.println(data.getUserEmail()+" "+ data.getUserPassword());
+        return  ResponseEntity.ok()/*.header("Authorization","Bearer "+token)*/.body(authService.login(data));
 
     }
     @PostMapping("/signin")
-    public ResponseEntity<SigninReponseModel> Signin(@RequestBody Map<String,Object> data) {
+    public ResponseEntity<ResponseModel> Signin(@RequestBody Map<String,Object> data) {
         UserEntitiy userEntitiy = new UserEntitiy();
         userEntitiy.setUserName((String) data.get("userName"));
         userEntitiy.setUserPassword((String) data.get("userPassword"));

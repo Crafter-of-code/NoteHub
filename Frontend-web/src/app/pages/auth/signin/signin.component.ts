@@ -25,7 +25,7 @@ import { ResponseStatusComponent } from '../../../components/response-status/res
 })
 export class SigninComponent implements OnInit {
   button_disable: Boolean = false;
-  reponseStatus = false;
+  errorStatus = false;
   reponseMessage = '';
   constructor(private seo: SetSeoService, private http: HttpService) {}
   ngOnInit(): void {
@@ -61,11 +61,11 @@ export class SigninComponent implements OnInit {
         };
         this.http.signIn(data).subscribe({
           next: (data) => {
-            this.reponseStatus = data.errorStatus;
+            this.errorStatus = data.errorStatus;
             this.reponseMessage = data.message;
             this.button_disable = false;
             setTimeout(() => {
-              this.reponseStatus = false;
+              this.errorStatus = false;
               this.reponseMessage = '';
             }, 2000);
           },
