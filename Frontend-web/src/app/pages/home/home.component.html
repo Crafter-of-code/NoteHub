@@ -3,9 +3,14 @@
 </aside>
 <main
   class="h-[calc(90vh-1.1rem)] bg-linear-to-br from-zinc-950 via-zinc-900 to-black text-zinc-100"
-  *ngIf="add_note; else showNote"
+  *ngIf="showAddEditNote; else showNote"
 >
-  <app-add-note />
+  <app-add-edit-note
+    [noteId]="noteId"
+    [isEditingMode]="isEditingMode"
+    (toggelAddEditNoteShow)="addEditNote()"
+    (responseStatusEmitter)="responseStatusHandler($event)"
+  />
 </main>
 <ng-template #showNote>
   <main
@@ -57,17 +62,25 @@
     </ng-template>
   </main></ng-template
 >
-
+<!-- this is use to toggel the screen-->
 <div class="fixed bottom-20 right-2">
-  <app-solid-button (clicked)="button_clicked()">
+  <app-solid-button (clicked)="addEditNote()">
     <img
       src="/asset/close.png"
       width="30"
       height="30"
-      *ngIf="add_note; else showCross"
+      *ngIf="showAddEditNote; else showCross"
+      title="add notes"
+      aria-label="click to add note"
     />
     <ng-template #showCross
-      ><img src="/asset/add.png" width="30" height="30" />
+      ><img
+        src="/asset/add.png"
+        width="30"
+        height="30"
+        title="close"
+        aria-label="click to close the window"
+      />
     </ng-template>
   </app-solid-button>
 </div>

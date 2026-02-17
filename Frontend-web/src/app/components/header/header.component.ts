@@ -4,9 +4,15 @@ import { OutlineButtonComponent } from '../outline-button/outline-button.compone
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ButtonHandlersService } from '../../services/ButtonHandlers/button-handlers.service';
+import { SolidButtonComponent } from '../solid-button/solid-button.component';
 @Component({
   selector: 'app-header',
-  imports: [OutlineButtonComponent, RouterLink, CommonModule],
+  imports: [
+    OutlineButtonComponent,
+    RouterLink,
+    CommonModule,
+    SolidButtonComponent,
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
@@ -22,9 +28,7 @@ export class HeaderComponent implements OnInit {
   clicked: boolean;
 
   appHeading?: string = appHeading;
-  ngOnInit(): void {
-    console.log();
-  }
+  ngOnInit(): void {}
   button_click() {
     if (this.clicked) {
       this.clicked = !this.clicked;
@@ -33,8 +37,11 @@ export class HeaderComponent implements OnInit {
     } else {
       this.clicked = !this.clicked;
       this.imageUrl = 'asset/home.png';
-      console.log('going to setting page');
       this.route.navigate(['home', 'setting']);
     }
+  }
+  logoutHandler() {
+    localStorage.clear();
+    this.route.navigate(['/'], { replaceUrl: true });
   }
 }

@@ -17,7 +17,8 @@ export class WelcomeComponent implements OnInit {
   constructor(
     private router: Router,
     private seo: SetSeoService,
-    private buttonEvent: ButtonHandlersService
+    private buttonEvent: ButtonHandlersService,
+    private route: Router
   ) {}
   appHeading: string = appHeading;
   ngOnInit(): void {
@@ -28,6 +29,9 @@ export class WelcomeComponent implements OnInit {
       keyword:
         'note taking app, simple notes app, write notes online, smart note app, productivity notes, notehub',
     });
+    if (localStorage.getItem('token')) {
+      this.route.navigate(['/', 'home'], { replaceUrl: true });
+    }
   }
   loginButtonHandler = () => {
     this.buttonEvent.goToLoginPage();

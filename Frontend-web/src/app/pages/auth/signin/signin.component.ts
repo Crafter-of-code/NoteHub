@@ -79,7 +79,11 @@ export class SigninComponent implements OnInit {
         });
       }
     } else {
-      console.log('yourm form is not valid');
+      this.errorStatus = true;
+      this.reponseMessage = 'please check your data';
+      setTimeout(() => {
+        this.reponseMessage = '';
+      }, 3000);
     }
   }
 }

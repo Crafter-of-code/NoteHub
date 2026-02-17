@@ -8,7 +8,7 @@
       </a>
     </h1>
   </div>
-  <div class="mr-3 ml-3">
+  <div class="mr-3 ml-3 flex items-center">
     <app-outline-button
       (clicked)="button_click()"
       class="border border-none text-zinc-100 hover:border-[#66aa6e] hover:text-[#66aa6e] transition"
@@ -16,5 +16,12 @@
     >
       <img [src]="imageUrl" height="17" width="17" alt="setting" />
     </app-outline-button>
+    <app-solid-button
+      title="logout"
+      aria_label="logout button"
+      (clicked)="logoutHandler()"
+    >
+      <img loading="lazy" src="/asset/power-off.png" height="17" width="17" />
+    </app-solid-button>
   </div>
 </header>

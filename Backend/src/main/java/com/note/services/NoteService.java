@@ -63,4 +63,24 @@ public class NoteService {
             return  rm;
         }
     }
+    public NoteResponseModel getSingleNote(Long id){
+     NoteEntity noteData = noteRepository.getReferenceById(id);
+     return new NoteResponseModel(noteData.getNoteId(),noteData.getNoteTitle(),noteData.getNoteContent(),noteData.getCreateAt());
+    }
+    public ResponseModel updateSingleNote(Long noteId,NoteEntity updatedNoteData){
+        ResponseModel rm = new ResponseModel();
+        try{
+            NoteEntity existingNote = noteRepository.findById(noteId).orElseThrow(()->new RuntimeException("note is note found"));
+            existingNote.setNoteTitle(updatedNoteData.getNoteTitle());
+            existingNote.setNoteContent(updatedNoteData.getNoteContent());
+            noteRepository.save(existingNote);
+            rm.setErrorStatus(false);
+            rm.setMessage("You note has been successfully updated");
+            return  rm;
+        }catch (Exception e){
+            rm.setErrorStatus(true);
+            rm.setMessage("We are facing some error while updaing you note");
+            return  rm;
+        }
+    }
 }

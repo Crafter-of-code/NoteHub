@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { SetSeoService } from '../../services/seo/set-seo.service';
 import { homePageSeo } from '../../constants/seoData';
-import { notesType } from '../../types/dataTypes';
+import { notesDataType, responseDataType } from '../../types/dataTypes';
 import { CommonModule } from '@angular/common';
-import { ButtonHandlersService } from '../../services/ButtonHandlers/button-handlers.service';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../../services/http/http.service';
 import { SolidButtonComponent } from '../../components/solid-button/solid-button.component';
-import { AddNoteComponent } from '../../components/add-note/add-note.component';
+import { AddNoteComponent } from '../../components/add-edit-note/add-note.component';
 import { ResponseStatusComponent } from '../../components/response-status/response-status.component';
-
+//
+// injectable detail
 @Component({
   selector: 'app-home',
   imports: [
@@ -21,46 +21,63 @@ import { ResponseStatusComponent } from '../../components/response-status/respon
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
+//
+// component start from here
+//
 export class HomeComponent implements OnInit {
-  errorStatus = false;
+  noteId: number = 0;
+  isEditingMode: boolean = false;
+  showAddEditNote: boolean = false;
+  deleteIcon: string = 'asset/bin.png';
+  editIcon: string = 'asset/pencil.png';
+  errorStatus: boolean = false;
   reponseMessage = '';
   userId: string | null = '';
-  allNotes: notesType = [];
-  add_note: boolean = false;
+  allNotes: notesDataType = [];
   button_button_icon = '/asset/add.png';
   constructor(
+    private nav: Router,
     private seo: SetSeoService,
-    private buttonEvent: ButtonHandlersService,
-    private activedRoute: ActivatedRoute,
+    // private buttonEvent: ButtonHandlersService,
+    // private activedRoute: ActivatedRoute,
     private http: HttpService
   ) {}
+  ngOnInit(): void {
+    this.seo.setSeo(homePageSeo);
+    this.getAllNote();
+  }
   getAllNote() {
     this.http.getHomeData().subscribe({
       next: (data) => {
-        console.log(data);
         this.allNotes = data;
       },
       error: (err) => {
-        this.errorStatus = true;
-        this.reponseMessage =
-          'we are facing some problem while communicating to our server';
-        setTimeout(() => {
-          this.errorStatus = false;
-          this.reponseMessage = '';
-        }, 2000);
+        if (err.status == 403) {
+          if (localStorage.getItem('token')) {
+            this.getAllNote();
+          } else {
+            this.nav.navigate(['not-found']);
+            setTimeout(() => {
+              this.nav.navigate(['/', 'login']);
+            }, 4000);
+          }
+        } else {
+          this.errorStatus = true;
+          this.reponseMessage =
+            'we are facing some problem while communicating to our server';
+          setTimeout(() => {
+            this.errorStatus = false;
+            this.reponseMessage = '';
+          }, 2000);
+        }
       },
     });
   }
-  ngOnInit(): void {
-    this.seo.setSeo(homePageSeo);
-    this.userId = this.activedRoute.snapshot.paramMap.get('id');
-    console.log(`Getting id: ${this.userId}`);
-    this.getAllNote();
-  }
-  deleteIcon: string = 'asset/bin.png';
-  editIcon: string = 'asset/pencil.png';
+
   editButtonHandler(id: number) {
-    console.log(`edit note ${id}`);
+    this.noteId = id;
+    this.isEditingMode = true;
+    this.showAddEditNote = true;
   }
   // this is the delete note handler
   deleteButtonHandler(id: number) {
@@ -80,13 +97,17 @@ export class HomeComponent implements OnInit {
       },
     });
   }
-  button_clicked() {
-    this.add_note = !this.add_note;
+  addEditNote() {
+    this.showAddEditNote = !this.showAddEditNote;
+    this.isEditingMode = false;
     this.getAllNote();
   }
-  noteTitle: string = '';
-  noteContent: string = '';
-  getNoteData() {
-    console.log(this.noteTitle, this.noteContent);
+  responseStatusHandler(event: responseDataType) {
+    this.errorStatus = !!event.errorStatus;
+    this.reponseMessage = event.message ?? '';
+    setTimeout(() => {
+      this.errorStatus = true;
+      this.reponseMessage = '';
+    }, 3000);
   }
 }

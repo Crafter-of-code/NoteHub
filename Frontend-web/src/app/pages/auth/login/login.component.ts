@@ -30,6 +30,9 @@ export class LoginComponent {
     private route: Router
   ) {}
   ngOnInit(): void {
+    if (localStorage.getItem('token')) {
+      this.route.navigate(['/', 'home'], { replaceUrl: true });
+    }
     this.seo.setSeo(loginPageSeo);
   }
   loginHandler(userForm: NgForm) {
@@ -38,12 +41,10 @@ export class LoginComponent {
         userEmail: userForm.value.userEmail,
         userPassword: userForm.value.userPassword,
       };
-      console.log(data);
       this.http.logIn(data).subscribe({
         next: (data) => {
-          console.log(data);
           if (data.token) {
-            sessionStorage.setItem('token', `Bearer ${data.token}`);
+            localStorage.setItem('token', `Bearer ${data.token}`);
             this.reponseMessage = data.message;
             this.errorStatus = data.errorStatus;
             setTimeout(() => {
@@ -69,7 +70,11 @@ export class LoginComponent {
         },
       });
     } else {
-      console.log('the form is not valid');
+      this.errorStatus = true;
+      this.reponseMessage = 'please check your data';
+      setTimeout(() => {
+        this.reponseMessage = '';
+      }, 3000);
     }
   }
 }

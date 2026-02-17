@@ -23,13 +23,12 @@ public class NoteController {
     public ResponseEntity<List<NoteResponseModel>> getAllNotes(HttpServletRequest request){
         String header = request.getHeader("Authorization");
         String authoriationHeader = header.substring(7);
-        System.out.println(authoriationHeader);
         List<NoteResponseModel> notes = noteService.getAllNotes(authoriationHeader);
         return  ResponseEntity.ok().body(notes);
     }
     @PostMapping("/addnote")
     public ResponseEntity<ResponseModel> addNote(@RequestBody NoteEntity data,@RequestHeader("Authorization") String header){
-        System.out.println(header);
+//        System.out.println(header);
         String token = header.substring(7);
        String response = noteService.addNote(data,token);
         ResponseModel rm = new ResponseModel();
@@ -39,8 +38,6 @@ public class NoteController {
     }
     @DeleteMapping("/deletenote/{id}")
     public ResponseEntity<ResponseModel>deleteNote(@PathVariable String id){
-
-        System.out.println("The id is note id is: "+id);
         ResponseModel rm = noteService.deleteNote(Long.parseLong(id));
         if(rm.getErrorStatus()){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rm);
@@ -48,5 +45,17 @@ public class NoteController {
         else{
             return ResponseEntity.ok().body(rm);
         }
+    }
+    @GetMapping("/notes/{id}")
+    public ResponseEntity<NoteResponseModel> getSingleNote(@PathVariable String id){
+        System.out.println("WE get the we get the repsonse to get a particular note");
+        NoteResponseModel nrm = noteService.getSingleNote(Long.parseLong(id));
+        return  ResponseEntity.ok().body(nrm);
+    }
+    @PatchMapping("/note/{id}")
+    public ResponseEntity<ResponseModel> updateSingleNote(@PathVariable String id, @RequestBody NoteEntity updateNoteData){
+        ResponseModel rm = noteService.updateSingleNote(Long.parseLong(id),updateNoteData);
+        System.out.println("We are getting update at single note");
+        return  ResponseEntity.ok().body(rm);
     }
 }

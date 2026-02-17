@@ -1,5 +1,10 @@
 <div class="ml-1 mr-1">
-  <button class="solid-btn-style" (click)="onClick()">
+  <button
+    class="solid-btn-style"
+    (click)="onClick()"
+    [title]="title"
+    [attr.aria-label]="aria_label"
+  >
     {{ buttonHeading }}
     <ng-content />
   </button>

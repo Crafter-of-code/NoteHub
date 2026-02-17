@@ -2,9 +2,11 @@
   <form
     class="w-1/2 h-fit bg-zinc-900 border border-zinc-800 rounded-xl p-8 flex flex-col gap-6 shadow-md"
     #noteForm="ngForm"
-    (ngSubmit)="addComponent(noteForm)"
+    (ngSubmit)="addOrEditHandler(noteForm)"
   >
-    <h2 class="text-3xl font-semibold text-center text-zinc-100 mb-6">Login</h2>
+    <h2 class="text-3xl font-semibold text-center text-zinc-100 mb-6">
+      {{ formHeading }}
+    </h2>
 
     <!-- Username -->
     <div class="relative">
@@ -12,7 +14,7 @@
         type="text"
         placeholder="Title"
         name="noteTitle"
-        ngModel
+        [(ngModel)]="noteData.noteTitle"
         required
         class="w-full px-4 py-3 rounded-md bg-zinc-950 border border-zinc-800 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#66aa6e] focus:border-[#66aa6e] transition"
       />
@@ -23,7 +25,7 @@
         cols="40"
         placeholder="Write you content here"
         name="noteContent"
-        ngModel
+        [(ngModel)]="noteData.noteContent"
         required
         class="w-full px-4 py-3 rounded-md bg-zinc-950 border border-zinc-800 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#66aa6e] focus:border-[#66aa6e] transition resize-y overflow-hidden"
       ></textarea>
@@ -32,7 +34,7 @@
     <!-- Submit Button -->
     <div class="mt-4" *ngIf="noteForm.valid">
       <app-outline-button
-        buttonHeading="Add This note"
+        [buttonHeading]="buttonHeading"
         class="w-full"
       ></app-outline-button>
     </div>
