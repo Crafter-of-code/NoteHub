@@ -2,7 +2,6 @@ package com.note.services;
 
 import com.note.entity.UserEntitiy;
 import com.note.repository.UserRepository;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

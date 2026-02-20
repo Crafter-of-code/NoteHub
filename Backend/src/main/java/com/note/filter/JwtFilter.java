@@ -23,7 +23,7 @@ public class JwtFilter extends OncePerRequestFilter {
      * Constructor injection for dependencies
      */
     public JwtFilter(JwtUtil jwtUtil,
-                     UserDetailsService userDetailsService) {
+            UserDetailsService userDetailsService) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
     }
@@ -33,8 +33,8 @@ public class JwtFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+            HttpServletResponse response,
+            FilterChain filterChain)
             throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
@@ -50,19 +50,16 @@ public class JwtFilter extends OncePerRequestFilter {
                         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
                         // Set authentication in SecurityContext
-                        UsernamePasswordAuthenticationToken authToken =
-                                new UsernamePasswordAuthenticationToken(
-                                        userDetails,
-                                        null,
-                                        userDetails.getAuthorities()
-                                );
+                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities());
 
                         SecurityContextHolder.getContext().setAuthentication(authToken);
                     } catch (Exception e) {
                         System.out.println("User not found for email: " + email);
                     }
                 }
-
 
             }
         }

@@ -1,5 +1,8 @@
+<aside class="fixed top-0 flex w-screen justify-center z-999">
+  <app-response-status [status]="errorStatus" [message]="reponseMessage" />
+</aside>
 <main
-  class="min-h-[calc(91.5vh-5rem)] py-8 bg-linear-to-br from-zinc-950 via-zinc-900 to-black text-zinc-100 flex justify-center items-start max-sm:h-fit"
+  class="min-h-[calc(91.5vh-4.3rem)] py-8 bg-linear-to-br from-zinc-950 via-zinc-900 to-black text-zinc-100 flex justify-center items-center max-sm:h-fit"
 >
   <div
     class="main_container flex flex-col items-center gap-6 sm:w-1/2 max-sm:mx-5"
@@ -26,9 +29,14 @@
           <h2 class="text-zinc-100 font-semibold text-lg max-sm:text-center">
             Name
           </h2>
-          <p class="text-zinc-400 max-sm:text-center">{{ user.name }}</p>
+          <p class="text-zinc-400 max-sm:text-center">
+            {{ userData.userName }}
+          </p>
         </div>
-        <app-solid-button buttonHeading="Change" />
+        <app-solid-button
+          buttonHeading="Change"
+          (clicked)="toggleShowEditorForUserName()"
+        />
       </div>
       <div
         id="field_2_email"
@@ -39,10 +47,13 @@
             Email
           </h2>
           <p class="text-zinc-400 max-sm:text-center">
-            {{ user.email }}
+            {{ userData.userEmail }}
           </p>
         </div>
-        <app-solid-button buttonHeading="Change" />
+        <app-solid-button
+          buttonHeading="Change"
+          (clicked)="toggleShowEditorForUserEmail()"
+        />
       </div>
 
       <div
@@ -53,10 +64,27 @@
           <h2 class="text-zinc-100 font-semibold text-lg max-sm:text-center">
             Password
           </h2>
-          <p class="text-zinc-400 max-sm:text-center">********</p>
+          <p class="text-zinc-400 max-sm:text-center"></p>
         </div>
-        <app-solid-button buttonHeading="Change" />
+        <app-solid-button
+          buttonHeading="Change"
+          (clicked)="toggleShowEditorForUserPassword()"
+        />
       </div>
     </div>
   </div>
 </main>
+<div
+  *ngIf="showEditor"
+  class="h-screen w-screen fixed top-0 bg-[rgba(0,0,0,0.9)] transpare"
+>
+  <app-user-detail-editor
+    class="flex justify-center items-center h-screen"
+    (toggleHandler)="showEditor = $event"
+    [editOperation]="editOperation"
+    [defaultValueToEdit]="defaultValueToEdit"
+    (responseEmitter)="
+      responseSetter($event.responseStatus, $event.responseMessage)
+    "
+  />
+</div>

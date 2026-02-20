@@ -5,7 +5,6 @@ import com.note.responseModel.NoteResponseModel;
 import com.note.responseModel.ResponseModel;
 import com.note.services.NoteService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,46 +15,50 @@ import java.util.List;
 @RequestMapping("/api")
 public class NoteController {
     private NoteService noteService;
-    NoteController(NoteService noteService){
+
+    NoteController(NoteService noteService) {
         this.noteService = noteService;
     }
+
     @GetMapping("/home")
-    public ResponseEntity<List<NoteResponseModel>> getAllNotes(HttpServletRequest request){
+    public ResponseEntity<List<NoteResponseModel/* NoteEntity */>> getAllNotes(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
         String authoriationHeader = header.substring(7);
-        List<NoteResponseModel> notes = noteService.getAllNotes(authoriationHeader);
-        return  ResponseEntity.ok().body(notes);
+        List<NoteResponseModel/* NoteEntity */> notes = noteService.getAllNotes(authoriationHeader);
+        return ResponseEntity.ok().body(notes);
     }
+
     @PostMapping("/addnote")
-    public ResponseEntity<ResponseModel> addNote(@RequestBody NoteEntity data,@RequestHeader("Authorization") String header){
-//        System.out.println(header);
+    public ResponseEntity<ResponseModel> addNote(@RequestBody NoteEntity data,
+            @RequestHeader("Authorization") String header) {
         String token = header.substring(7);
-       String response = noteService.addNote(data,token);
+        String response = noteService.addNote(data, token);
         ResponseModel rm = new ResponseModel();
         rm.setErrorStatus(false);
         rm.setMessage(response);
-        return  ResponseEntity.ok().body(rm);
+        return ResponseEntity.ok().body(rm);
     }
+
     @DeleteMapping("/deletenote/{id}")
-    public ResponseEntity<ResponseModel>deleteNote(@PathVariable String id){
+    public ResponseEntity<ResponseModel> deleteNote(@PathVariable String id) {
         ResponseModel rm = noteService.deleteNote(Long.parseLong(id));
-        if(rm.getErrorStatus()){
+        if (rm.getErrorStatus()) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rm);
-        }
-        else{
+        } else {
             return ResponseEntity.ok().body(rm);
         }
     }
+
     @GetMapping("/notes/{id}")
-    public ResponseEntity<NoteResponseModel> getSingleNote(@PathVariable String id){
-        System.out.println("WE get the we get the repsonse to get a particular note");
+    public ResponseEntity<NoteResponseModel> getSingleNote(@PathVariable String id) {
         NoteResponseModel nrm = noteService.getSingleNote(Long.parseLong(id));
-        return  ResponseEntity.ok().body(nrm);
+        return ResponseEntity.ok().body(nrm);
     }
+
     @PatchMapping("/note/{id}")
-    public ResponseEntity<ResponseModel> updateSingleNote(@PathVariable String id, @RequestBody NoteEntity updateNoteData){
-        ResponseModel rm = noteService.updateSingleNote(Long.parseLong(id),updateNoteData);
-        System.out.println("We are getting update at single note");
-        return  ResponseEntity.ok().body(rm);
+    public ResponseEntity<ResponseModel> updateSingleNote(@PathVariable String id,
+            @RequestBody NoteEntity updateNoteData) {
+        ResponseModel rm = noteService.updateSingleNote(Long.parseLong(id), updateNoteData);
+        return ResponseEntity.ok().body(rm);
     }
 }

@@ -8,12 +8,11 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class TypewritterComponent implements OnInit {
   @Input() message: String = '';
-  // fullText = 'Angular is awesome!';
   fullText: String = '';
   displayText = '';
-  typingSpeed = 150; // ms per character
+  typingSpeed = 150;
   deletingSpeed = 80;
-  pauseBetween = 1000; // pause before deleting or retyping
+  pauseBetween = 1000;
 
   ngOnInit() {
     this.fullText = this.message;

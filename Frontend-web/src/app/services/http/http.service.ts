@@ -1,7 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { addNoteDataType, singleNoteDataType } from '../../types/dataTypes';
+import {
+  addNoteDataType,
+  singleNoteDataType,
+  userDataFromServer,
+} from '../../types/dataTypes';
 
 type loginSeccessesMessage = {
   message: string;
@@ -17,23 +21,11 @@ export type responseDataType = {
 })
 export class HttpService {
   token = localStorage.getItem('token');
-  header = {};
   defaultRoute: string = 'http://localhost:8080/api';
-  userId: number = 0;
   constructor(
     private http: HttpClient,
     private activatedRoute: ActivatedRoute
-  ) {
-    this.header = new HttpHeaders({
-      Authorization: `${this.token}`,
-    });
-  }
-  login() {
-    return this.http.post<loginSeccessesMessage>(
-      `http://localhost:9191/login`,
-      { name: 'uzair' }
-    );
-  }
+  ) {}
   signIn(data: { userName: string; userEmail: string; userPassword: string }) {
     return this.http.post<any>(`${this.defaultRoute}/signin`, data);
   }
@@ -41,10 +33,12 @@ export class HttpService {
     return this.http.post<responseDataType>(`${this.defaultRoute}/login`, data);
   }
   getHomeData() {
-    const headers = new HttpHeaders({
+    const authheaders = new HttpHeaders({
       Authorization: `${this.token}`,
     });
-    return this.http.get<any>(`${this.defaultRoute}/home`, { headers });
+    return this.http.get<any>(`${this.defaultRoute}/home`, {
+      headers: authheaders,
+    });
   }
   addNote(data: addNoteDataType) {
     const headers = new HttpHeaders({
@@ -82,5 +76,24 @@ export class HttpService {
       updatedNote,
       { headers: { Authorization: `${this.token}` } }
     );
+  }
+  getUserDetail() {
+    const authHeader = new HttpHeaders({
+      Authorization: `${this.token}`,
+    });
+    return this.http.get<userDataFromServer>(
+      `${this.defaultRoute}/userdetails`,
+      {
+        headers: authHeader,
+      }
+    );
+  }
+  updateUserDetail(data: { userName: string }) {
+    const authHeader = new HttpHeaders({
+      Authorization: `${this.token}`,
+    });
+    return this.http.put(`${this.defaultRoute}/update-user-name`, data, {
+      headers: authHeader,
+    });
   }
 }

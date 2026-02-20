@@ -1,7 +1,5 @@
 package com.note.responseModel;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDateTime;
 
 public class NoteResponseModel {

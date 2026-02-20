@@ -4,10 +4,8 @@ import { SolidButtonComponent } from '../../../components/solid-button/solid-but
 import { CommonModule } from '@angular/common';
 import { SetSeoService } from '../../../services/seo/set-seo.service';
 import { loginPageSeo } from '../../../constants/seoData';
-import {
-  HttpService,
-  responseDataType,
-} from '../../../services/http/http.service';
+import { HttpService } from '../../../services/http/http.service';
+import { responseDataType } from '../../../types/dataTypes';
 import { Router } from '@angular/router';
 import { ResponseStatusComponent } from '../../../components/response-status/response-status.component';
 @Component({
@@ -46,9 +44,8 @@ export class LoginComponent {
           if (data.token) {
             localStorage.setItem('token', `Bearer ${data.token}`);
             this.reponseMessage = data.message;
-            this.errorStatus = data.errorStatus;
+            this.errorStatus = data.errorStatus ?? false;
             setTimeout(() => {
-              this.http.userId = data.userId;
               return this.route.navigate(['home']);
             }, 2000);
           } else {

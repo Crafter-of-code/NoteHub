@@ -18,6 +18,7 @@ export class AddNoteComponent implements OnInit {
   @Input() showAddEditNote: boolean = true;
   @Output() toggelAddEditNoteShow = new EventEmitter<void>();
   @Output() responseStatusEmitter = new EventEmitter<responseDataType>();
+  buttonDisabled: boolean = false;
   noteData = {
     noteTitle: '',
     noteContent: '',
@@ -33,7 +34,6 @@ export class AddNoteComponent implements OnInit {
           this.noteData.noteContent = data.noteContent;
         },
         error: (err) => {
-          console.log(err);
           this.toggelAddEditNoteShow.emit();
           this.responseStatusEmitter.emit({
             errorStatus: true,
@@ -46,6 +46,7 @@ export class AddNoteComponent implements OnInit {
     }
   }
   addOrEditHandler(noteForm: NgForm) {
+    this.buttonDisabled = true;
     if (this.isEditingMode) {
       const updatedNote: addNoteDataType = {
         noteTitle: noteForm.value.noteTitle,
@@ -66,6 +67,9 @@ export class AddNoteComponent implements OnInit {
             errorStatus: true,
           });
         },
+        complete: () => {
+          this.buttonDisabled = false;
+        },
       });
     } else {
       if (noteForm.valid) {
@@ -82,13 +86,11 @@ export class AddNoteComponent implements OnInit {
             });
           },
           error: (err) => {
-            console.log(err);
             this.toggelAddEditNoteShow.emit();
             this.responseStatusEmitter.emit({
               message: 'Facing some error while adding the note',
               errorStatus: false,
             });
-            console.log(err);
           },
         });
       }

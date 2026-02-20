@@ -40,8 +40,8 @@ export class HeaderComponent implements OnInit {
       this.route.navigate(['home', 'setting']);
     }
   }
-  logoutHandler() {
-    localStorage.clear();
+  async logoutHandler() {
+    await localStorage.clear();
     this.route.navigate(['/'], { replaceUrl: true });
   }
 }

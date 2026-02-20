@@ -45,11 +45,13 @@ public class AuthService {
                 return rm;
             }
         } catch (Exception e) {
-            System.out.println(e);
+            ResponseModel rm = new ResponseModel();
+            rm.setErrorStatus(true);
+            rm.setMessage(e.getMessage());
+            return  rm;
+
         }
-        responseModel.setMessage("some thing went wrong");
-        responseModel.setErrorStatus(true);
-        return responseModel;
+//        d
     }
 
     public ResponseModel signIn(UserEntitiy data) {

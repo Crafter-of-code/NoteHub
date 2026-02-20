@@ -12,6 +12,7 @@ export class SolidButtonComponent {
   @Input() title: string = '';
   @Input() aria_label: string = '';
   @Output() clicked = new EventEmitter<void>();
+  @Input() buttonDisabled: boolean = false;
   onClick() {
     this.clicked.emit();
   }

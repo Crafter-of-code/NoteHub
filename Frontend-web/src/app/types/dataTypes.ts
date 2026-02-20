@@ -19,3 +19,7 @@ export type responseDataType = {
   token?: string;
   userId?: number;
 };
+export type userDataFromServer = {
+  userName: string;
+  userEmail: string;
+};

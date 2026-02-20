@@ -32,8 +32,6 @@ export const routes: Routes = [
           import('./pages/home/home.component').then(
             (page) => page.HomeComponent
           ),
-        // redirectTo: '/not-found',
-        // pathMatch: 'full',
       },
       {
         path: 'setting',
@@ -41,22 +39,6 @@ export const routes: Routes = [
           import('./pages/setting/setting.component').then(
             (page) => page.SettingComponent
           ),
-      },
-      {
-        path: ':id',
-        // loadComponent: () =>
-        //   import('./pages/home/home.component').then(
-        //     (page) => page.HomeComponent
-        //   ),
-        children: [
-          // {
-          //   path: 'setting',
-          //   loadComponent: () =>
-          //     import('./pages/setting/setting.component').then(
-          //       (page) => page.SettingComponent
-          //     ),
-          // },
-        ],
       },
     ],
   },

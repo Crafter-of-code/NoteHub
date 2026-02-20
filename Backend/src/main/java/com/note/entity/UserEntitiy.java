@@ -2,10 +2,10 @@ package com.note.entity;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+
 @Component
 @Entity
 @Table(name = "Users")
@@ -28,6 +28,7 @@ public class UserEntitiy {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
     public long getUserId() {
         return userId;
     }
