@@ -8,8 +8,10 @@ import SolidButton from '../../components/SolidButton';
 import OutlineButton from '../../components/OutlineButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { appContext } from '../../store/AppContextProvider';
 const Login = (): React.ReactElement => {
   const navigation = useNavigation<any>();
+  const { buttonDisable } = React.useContext(appContext);
   return (
     <LinearGradient
       colors={['#09090b', '#18181b', '#000000']}
@@ -55,7 +57,11 @@ const Login = (): React.ReactElement => {
                   )}
 
                   <View style={{ marginTop: 20 }}>
-                    <SolidButton title="Login" opFunc={handleSubmit} />
+                    <SolidButton
+                      title="Login"
+                      opFunc={handleSubmit}
+                      buttonDisable={buttonDisable}
+                    />
                   </View>
                 </View>
               )}

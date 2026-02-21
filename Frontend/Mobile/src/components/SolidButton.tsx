@@ -1,9 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import LoadingUi from './Loading';
 type props = {
   title?: string;
   opFunc?: () => void;
+  buttonDisable: boolean;
 };
 const SolidButton = (props: props): React.ReactElement => {
   return (
@@ -12,12 +14,17 @@ const SolidButton = (props: props): React.ReactElement => {
         style={[style.button]}
         activeOpacity={0.6}
         onPress={props.opFunc}
+        disabled={props.buttonDisable}
       >
         <LinearGradient
           colors={['#66aa6e', '#539f5a']}
           style={style.gradient_container}
         >
-          <Text style={[style.button_text]}>{props.title}</Text>
+          {props.buttonDisable ? (
+            <LoadingUi />
+          ) : (
+            <Text style={[style.button_text]}>{props.title}</Text>
+          )}
         </LinearGradient>
       </TouchableOpacity>
     </>

@@ -7,8 +7,10 @@ import { Formik } from 'formik';
 import OutlineButton from '../../components/OutlineButton';
 import InputField from '../../components/InputField';
 import { SigninValidator, initialValueOfSignin } from './AuthValidator';
+import { appContext } from '../../store/AppContextProvider';
 //
 const Signin = (): React.ReactElement => {
+  const { signInSubmitHandler, buttonDisable } = React.useContext(appContext);
   return (
     <LinearGradient
       colors={['#09090b', '#18181b', '#000000']}
@@ -21,8 +23,7 @@ const Signin = (): React.ReactElement => {
             initialValues={initialValueOfSignin}
             validationSchema={SigninValidator}
             onSubmit={values => {
-              console.log(values);
-              Alert.alert(JSON.stringify(values));
+              signInSubmitHandler(values);
             }}
           >
             {({ values, errors, handleSubmit, handleReset, handleChange }) => (
@@ -102,11 +103,19 @@ const Signin = (): React.ReactElement => {
                 </View>
                 <View style={style.form_button_main_container}>
                   <View style={style.button_containe}>
-                    <SolidButton title="signin" opFunc={handleSubmit} />
+                    <SolidButton
+                      title="signin"
+                      opFunc={handleSubmit}
+                      buttonDisable={buttonDisable}
+                    />
                   </View>
-                  <View style={style.button_containe}>
-                    <OutlineButton title="Reset" opFunc={handleReset} />
-                  </View>
+                  {buttonDisable ? (
+                    <View></View>
+                  ) : (
+                    <View style={style.button_containe}>
+                      <OutlineButton title="Reset" opFunc={handleReset} />
+                    </View>
+                  )}
                 </View>
               </View>
             )}

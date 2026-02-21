@@ -1,12 +1,15 @@
 import React from 'react';
 import StackNavigation from './Navigation/StackNavigation';
 import { NavigationContainer } from '@react-navigation/native';
-import LinearGradient from 'react-native-linear-gradient';
+import AppContextProvider from './store/AppContextProvider';
+import { navigationRef } from './store/screenNavigate';
 const Layout = (): React.ReactElement => {
   return (
-    <NavigationContainer>
-      <StackNavigation />
-    </NavigationContainer>
+    <AppContextProvider>
+      <NavigationContainer ref={navigationRef}>
+        <StackNavigation />
+      </NavigationContainer>
+    </AppContextProvider>
   );
 };
 export default Layout;
