@@ -4,3 +4,7 @@ export type singInType = {
   password: string;
   confirmPassword: string;
 };
+export type logInType = {
+  email: string;
+  password: string;
+};
