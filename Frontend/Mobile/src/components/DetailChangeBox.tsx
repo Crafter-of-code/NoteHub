@@ -15,7 +15,6 @@ const DetailChangeBox = (props: props): React.ReactElement => {
   const [changeDetail, setChangeDetail] = React.useState<string>();
   function detailChange() {
     const typeOfEdit = props.typeOfEdit as string;
-    console.log(`type of edit is: ${typeOfEdit}`);
     if (!typeOfEdit) {
       props.setEditMode(false);
       setChangeDetail('');

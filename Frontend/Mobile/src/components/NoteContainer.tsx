@@ -1,49 +1,71 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
+
 type props = {
   title?: string;
   message?: string;
   children?: React.ReactNode;
 };
+
 const NoteContainer = ({
   title,
   message,
   children,
 }: props): React.ReactElement => {
   return (
-    <>
-      <View style={styles.main_container}>
-        {title ? <Text style={styles.title_color}>{title}</Text> : ''}
-        {message ? <Text style={styles.message_color}>{message}</Text> : ''}
-        {children ? <View style={styles.logo_container}>{children}</View> : ''}
-      </View>
-    </>
+    <View style={styles.card}>
+      {title ? <Text style={styles.title}>{title}</Text> : null}
+
+      {message ? (
+        <Text style={styles.message} numberOfLines={3}>
+          {message}
+        </Text>
+      ) : null}
+
+      {children ? (
+        <View style={styles.actionsContainer}>{children}</View>
+      ) : null}
+    </View>
   );
 };
+
 const styles = StyleSheet.create({
-  main_container: {
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    backgroundColor: '#262527',
-    borderRadius: 8,
-    marginVertical: 10,
+  card: {
+    backgroundColor: '#1e1e1e',
+    borderRadius: 18,
+    paddingVertical: 18,
+    paddingHorizontal: 18,
+    marginVertical: 12,
+
+    borderWidth: 1,
+    borderColor: '#2c2c2e',
+
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 5 },
+    shadowRadius: 10,
   },
-  title_color: {
-    fontWeight: 500,
+
+  title: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#ffffff',
+    marginBottom: 8,
     textAlign: 'center',
-    color: '#F4F4F5',
-    fontSize: 16,
   },
-  message_color: {
-    fontWeight: 400,
-    fontSize: 13,
+
+  message: {
     textAlign: 'center',
-    color: '#AAA8B0',
-    marginVertical: 10,
+    fontSize: 14,
+    color: '#b0b0b0',
+    lineHeight: 20,
   },
-  logo_container: {
-    // justifyContent: 'center',
-    // flexDirection: 'row',
+
+  actionsContainer: {
+    marginTop: 14,
+    gap: 10,
   },
 });
+
 export default NoteContainer;

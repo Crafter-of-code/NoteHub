@@ -5,7 +5,7 @@ import LoadingUi from './Loading';
 type props = {
   title?: string;
   opFunc?: () => void;
-  buttonDisable: boolean;
+  buttonDisable?: boolean;
 };
 const SolidButton = (props: props): React.ReactElement => {
   return (

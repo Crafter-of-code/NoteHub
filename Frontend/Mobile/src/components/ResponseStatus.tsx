@@ -1,45 +1,88 @@
-import React, { ReactElement } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import React, { ReactElement, useEffect } from 'react';
+import { Text, StyleSheet } from 'react-native';
 import { appContext } from '../store/AppContextProvider';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
 
-const ResponseStatus = (): ReactElement => {
+const ResponseStatus = (): ReactElement | null => {
   const { responseErrorStatus, reponseMessage } = React.useContext(appContext);
+
+  // shared value for vertical position
+  const translateY = useSharedValue(-100); // start off-screen
+
+  // animated style
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: translateY.value }],
+    };
+  });
+
+  useEffect(() => {
+    if (reponseMessage) {
+      // slide down
+      translateY.value = withTiming(60, {
+        duration: 400,
+        easing: Easing.out(Easing.cubic),
+      });
+
+      // slide back up after 3 seconds
+      const timer = setTimeout(() => {
+        translateY.value = withTiming(-100, {
+          duration: 400,
+          easing: Easing.in(Easing.cubic),
+        });
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [reponseMessage]);
+
+  if (!reponseMessage) return null;
+
   return (
-    <View
+    <Animated.View
       style={[
         style.mainContainer,
         responseErrorStatus ? style.bgRed : style.bgGreen,
+        animatedStyle,
       ]}
     >
-      {reponseMessage ? (
-        <Text style={[style.textStylingResponseStatus]}>{reponseMessage}</Text>
-      ) : (
-        <View></View>
-      )}
-    </View>
+      <Text style={style.textStylingResponseStatus}>{reponseMessage}</Text>
+    </Animated.View>
   );
 };
+
 const style = StyleSheet.create({
   mainContainer: {
     position: 'absolute',
-    top: 60,
-    width: '100%',
+    width: '90%',
+    alignSelf: 'center',
     borderRadius: 8,
     zIndex: 999,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   textStylingResponseStatus: {
     color: 'white',
-    backgroundColor: 'transparent',
     fontSize: 16,
     fontWeight: '500',
-    margin: 10,
     textAlign: 'center',
   },
   bgRed: {
-    backgroundColor: 'red',
+    backgroundColor: '#FF5C5C',
   },
   bgGreen: {
-    backgroundColor: 'green',
+    backgroundColor: '#4CA1AF',
   },
 });
+
 export default ResponseStatus;

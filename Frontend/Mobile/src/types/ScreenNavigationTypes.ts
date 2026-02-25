@@ -7,3 +7,9 @@ export type screenNavigationType = {
   name: string;
   params?: object;
 };
+export type stackNavigationForBottomTabParamList = {
+  allNote: undefined;
+  editNote: {
+    id: number;
+  };
+};

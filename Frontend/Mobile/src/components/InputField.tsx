@@ -5,32 +5,39 @@ type Props = {
   placeHolder?: string;
   value?: string;
   setValue?: (text: string) => void;
+  multiLine?: boolean;
+  numberOfLine?: number;
 };
 
 const InputField = (props: Props): React.ReactElement => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <View
-      style={[
-        styles.inputContainer,
-        isFocused && styles.inputFocused, // focus glow
-      ]}
-    >
+    <View style={[styles.inputContainer, isFocused && styles.inputFocused]}>
       <TextInput
-        style={styles.input}
+        style={[styles.input, props.multiLine ? styles.bigInt : '']}
         placeholder={props.placeHolder}
         placeholderTextColor="#aaa"
         onChangeText={props.setValue}
         value={props.value}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
+        multiline={props.multiLine}
+        numberOfLines={props.numberOfLine}
       />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  bigInt: {
+    height: 150,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 12,
+    textAlignVertical: 'top',
+  },
   inputContainer: {
     width: '100%',
     marginVertical: 5,

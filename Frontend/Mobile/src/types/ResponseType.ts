@@ -15,4 +15,5 @@ export type noteResponseType = {
 export type userResponseType = {
   userEmail: string;
   userName: string;
+  createdAT: string;
 };

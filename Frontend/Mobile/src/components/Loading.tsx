@@ -12,7 +12,6 @@ const LoadingUi = (): React.ReactElement => {
   const rotation = useSharedValue(0);
 
   const animationStyle = useAnimatedStyle(() => {
-    // This function automatically becomes a "worklet"
     return {
       transform: [{ rotate: `${rotation.value}deg` }],
     };
@@ -39,8 +38,6 @@ const style = StyleSheet.create({
     borderColor: 'rgba(102, 170, 110, 0.3)',
     borderTopColor: 'white',
     borderRightColor: 'white',
-    // border
-    // borderColor: 'rgba(0, 0, 0, 0.3)',
   },
 });
 

@@ -4,13 +4,12 @@ import {
   StackActions,
 } from '@react-navigation/native';
 export const navigationRef: any = createNavigationContainerRef();
-export function navigate(name?: string) {
+export function navigate(name?: string, param?: object) {
   if (navigationRef.isReady()) {
-    navigationRef.navigate(name);
+    navigationRef.navigate(name, param);
   }
 }
 export function push(name: string) {
-  console.log('got to' + name);
   if (navigationRef.isReady()) {
     navigationRef.dispatch(
       CommonActions.reset({

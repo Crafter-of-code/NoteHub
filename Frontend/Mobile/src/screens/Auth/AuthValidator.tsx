@@ -1,9 +1,9 @@
 import * as yup from 'yup';
 export const initialValueOfSignin = {
-  name: 'uzair',
-  email: 'uzair@gmail.com',
-  password: 'uzair@123',
-  confirmPassword: 'uzair@123',
+  name: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
 };
 export const initialValueOfLogin = {
   email: 'khan3@gmail.com',

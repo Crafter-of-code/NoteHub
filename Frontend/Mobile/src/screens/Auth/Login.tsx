@@ -1,5 +1,13 @@
 import React from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  Image,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import InputField from '../../components/InputField';
 import { Formik } from 'formik';
@@ -9,43 +17,46 @@ import OutlineButton from '../../components/OutlineButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { appContext } from '../../store/AppContextProvider';
-import { Toast } from 'toastify-react-native';
+
 const Login = (): React.ReactElement => {
   const navigation = useNavigation<any>();
-  const { buttonDisable } = React.useContext(appContext);
-  const { logInSubmitHandler } = React.useContext(appContext);
+  const { buttonDisable, logInSubmitHandler } = React.useContext(appContext);
+
   return (
-    <>
-      <LinearGradient
-        colors={['#09090b', '#18181b', '#000000']}
-        style={styles.gradient}
-      >
-        <SafeAreaView style={{ flex: 1 }}>
-          <View style={styles.container}>
-            {/* Centered Form */}
+    <LinearGradient
+      colors={['#09090b', '#18181b', '#000000']}
+      style={styles.gradient}
+    >
+      <SafeAreaView style={{ flex: 1 }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+        >
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <View style={styles.logoContainer}>
+              <Image
+                source={require('../../asset/login.png')}
+                style={styles.logoImage}
+                resizeMode="contain"
+              />
+            </View>
+
+            {/* Header */}
+            <Text style={styles.headerText}>Welcome Back</Text>
+            <Text style={styles.subText}>
+              Sign in to continue to your account and access your notes
+              securely.
+            </Text>
+
+            {/* Form */}
             <View style={styles.formWrapper}>
               <Formik
                 initialValues={initialValueOfLogin}
                 validationSchema={loginValidator}
-                onSubmit={values => {
-                  logInSubmitHandler(values);
-                  Toast.success('hello');
-                  Toast.warn('hey how are you', 'top');
-                }}
+                onSubmit={values => logInSubmitHandler(values)}
               >
                 {({ handleChange, errors, values, handleSubmit }) => (
-                  <View>
-                    <Text
-                      style={{
-                        marginVertical: 10,
-                        fontSize: 40,
-                        color: 'white',
-                        textAlign: 'center',
-                        fontWeight: 500,
-                      }}
-                    >
-                      Login
-                    </Text>
+                  <View style={{ gap: 15 }}>
                     <InputField
                       placeHolder="Enter your email"
                       setValue={handleChange('email')}
@@ -54,6 +65,7 @@ const Login = (): React.ReactElement => {
                     {errors.email && (
                       <Text style={styles.errorText}>{errors.email}</Text>
                     )}
+
                     <InputField
                       placeHolder="Enter your password"
                       setValue={handleChange('password')}
@@ -75,42 +87,74 @@ const Login = (): React.ReactElement => {
               </Formik>
             </View>
 
-            {/* Button at the bottom */}
-            <View style={styles.bottomButton}>
+            {/* Footer */}
+            <View style={styles.bottomContainer}>
               <OutlineButton
-                title="Don't have an account?"
+                title="Don't have an account? Sign Up"
                 opFunc={() => (navigation as any).navigate('signin')}
               />
+              <Text style={styles.footerText}>
+                By signing in, you agree to our Terms of Service and Privacy
+                Policy.
+              </Text>
             </View>
-          </View>
-        </SafeAreaView>
-      </LinearGradient>
-    </>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
-  gradient: {
-    flex: 1,
+  gradient: { flex: 1 },
+  scrollContainer: {
+    flexGrow: 1,
+    paddingHorizontal: 20,
+    paddingTop: 40,
+    paddingBottom: 40,
+    justifyContent: 'center',
   },
-  container: {
-    flex: 1,
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  logoImage: {
+    width: 120,
+    height: 120,
+  },
+  headerText: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: 'white',
+    textAlign: 'center',
+    marginBottom: 6,
+  },
+  subText: {
+    fontSize: 14,
+    color: 'white',
+    opacity: 0.6,
+    textAlign: 'center',
+    marginBottom: 20,
   },
   formWrapper: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  bottomButton: {
-    position: 'absolute',
-    bottom: 20,
-    width: '100%',
-    paddingHorizontal: 20,
-    alignItems: 'center',
+    gap: 15,
   },
   errorText: {
     color: '#ef4444',
-    marginVertical: 5,
+    fontSize: 12,
+    marginTop: 5,
+    marginHorizontal: 5,
+  },
+  bottomContainer: {
+    alignItems: 'center',
+    marginTop: 30,
+  },
+  footerText: {
+    fontSize: 12,
+    color: 'white',
+    opacity: 0.5,
+    textAlign: 'center',
+    marginTop: 10,
   },
 });
 

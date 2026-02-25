@@ -1,158 +1,200 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Alert } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  Image,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SolidButton from '../../components/SolidButton';
-import { Formik } from 'formik';
 import OutlineButton from '../../components/OutlineButton';
 import InputField from '../../components/InputField';
 import { SigninValidator, initialValueOfSignin } from './AuthValidator';
 import { appContext } from '../../store/AppContextProvider';
-//
+import { Formik } from 'formik';
+
 const Signin = (): React.ReactElement => {
   const { signInSubmitHandler, buttonDisable } = React.useContext(appContext);
+
   return (
     <LinearGradient
       colors={['#09090b', '#18181b', '#000000']}
       style={{ flex: 1 }}
     >
-      <SafeAreaView>
-        <View style={[style.inner_container]}>
-          <View style={{ width: '50%', alignItems: 'flex-end' }}></View>
-          <Formik
-            initialValues={initialValueOfSignin}
-            validationSchema={SigninValidator}
-            onSubmit={values => {
-              signInSubmitHandler(values);
-            }}
-          >
-            {({ values, errors, handleSubmit, handleReset, handleChange }) => (
-              <View style={style.main_form_container}>
-                <Text style={[style.form_heading]}>SignIn</Text>
-                <View style={{ marginVertical: 10 }}>
-                  <InputField
-                    value={values.name}
-                    placeHolder="Name"
-                    setValue={handleChange('name')}
-                  />
-                  {errors.name && (
-                    <Text
-                      style={{
-                        marginHorizontal: 10,
-                        color: '#ef4444',
-                        marginVertical: 5,
-                      }}
-                    >
-                      {errors.name}
-                    </Text>
-                  )}
-                </View>
-                <View style={{ marginVertical: 10 }}>
-                  <InputField
-                    value={values.email}
-                    placeHolder="Email"
-                    setValue={handleChange('email')}
-                  />
-                  {errors.email && (
-                    <Text
-                      style={{
-                        marginHorizontal: 10,
-                        color: '#ef4444',
-                        marginVertical: 5,
-                      }}
-                    >
-                      {errors.email}
-                    </Text>
-                  )}
-                </View>
-                <View style={{ marginVertical: 10 }}>
-                  <InputField
-                    value={values.password}
-                    placeHolder="Password"
-                    setValue={handleChange('password')}
-                  />
-                  {errors.password && (
-                    <Text
-                      style={{
-                        marginHorizontal: 10,
-                        color: '#ef4444',
-                        marginVertical: 5,
-                      }}
-                    >
-                      {errors.password}
-                    </Text>
-                  )}
-                </View>
-                <View style={{ marginVertical: 10 }}>
-                  <InputField
-                    value={values.confirmPassword}
-                    placeHolder="confirm Your password"
-                    setValue={handleChange('confirmPassword')}
-                  />
-                  {errors.confirmPassword && (
-                    <Text
-                      style={{
-                        marginHorizontal: 10,
-                        color: '#ef4444',
-                        marginVertical: 5,
-                      }}
-                    >
-                      {errors.confirmPassword}
-                    </Text>
-                  )}
-                </View>
-                <View style={style.form_button_main_container}>
-                  <View style={style.button_containe}>
-                    <SolidButton
-                      title="signin"
-                      opFunc={handleSubmit}
-                      buttonDisable={buttonDisable}
+      <SafeAreaView style={{ flex: 1 }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+        >
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            {/* Optional Illustration / Logo */}
+            <View style={styles.logoContainer}>
+              <Image
+                source={require('../../asset/signin.png')} // replace with your own illustration
+                style={styles.logoImage}
+                resizeMode="contain"
+              />
+            </View>
+
+            {/* Header & Subtext */}
+            <Text style={styles.form_heading}>Sign In</Text>
+            <Text style={styles.subText}>
+              Welcome back! Please sign in to continue and access your notes
+              securely.
+            </Text>
+
+            {/* Formik Form */}
+            <Formik
+              initialValues={initialValueOfSignin}
+              validationSchema={SigninValidator}
+              onSubmit={values => signInSubmitHandler(values)}
+            >
+              {({
+                values,
+                errors,
+                handleSubmit,
+                handleReset,
+                handleChange,
+              }) => (
+                <View style={styles.main_form_container}>
+                  <View style={styles.inputWrapper}>
+                    <InputField
+                      value={values.name}
+                      placeHolder="Name"
+                      setValue={handleChange('name')}
                     />
+                    {errors.name && (
+                      <Text style={styles.errorText}>{errors.name}</Text>
+                    )}
                   </View>
-                  {buttonDisable ? (
-                    <View></View>
-                  ) : (
-                    <View style={style.button_containe}>
-                      <OutlineButton title="Reset" opFunc={handleReset} />
+
+                  <View style={styles.inputWrapper}>
+                    <InputField
+                      value={values.email}
+                      placeHolder="Email"
+                      setValue={handleChange('email')}
+                    />
+                    {errors.email && (
+                      <Text style={styles.errorText}>{errors.email}</Text>
+                    )}
+                  </View>
+
+                  <View style={styles.inputWrapper}>
+                    <InputField
+                      value={values.password}
+                      placeHolder="Password"
+                      setValue={handleChange('password')}
+                    />
+                    {errors.password && (
+                      <Text style={styles.errorText}>{errors.password}</Text>
+                    )}
+                  </View>
+
+                  <View style={styles.inputWrapper}>
+                    <InputField
+                      value={values.confirmPassword}
+                      placeHolder="Confirm Password"
+                      setValue={handleChange('confirmPassword')}
+                    />
+                    {errors.confirmPassword && (
+                      <Text style={styles.errorText}>
+                        {errors.confirmPassword}
+                      </Text>
+                    )}
+                  </View>
+
+                  {/* Buttons */}
+                  <View style={styles.form_button_main_container}>
+                    <View style={styles.buttonContainer}>
+                      <SolidButton
+                        title="Sign In"
+                        opFunc={handleSubmit}
+                        buttonDisable={buttonDisable}
+                      />
                     </View>
-                  )}
+                    {!buttonDisable && (
+                      <View style={styles.buttonContainer}>
+                        <OutlineButton title="Reset" opFunc={handleReset} />
+                      </View>
+                    )}
+                  </View>
+
+                  {/* Footer Tip / Content */}
+                  <Text style={styles.footerText}>
+                    Don’t have an account yet? Sign up to create a new account
+                    and start taking notes today!
+                  </Text>
                 </View>
-              </View>
-            )}
-          </Formik>
-        </View>
+              )}
+            </Formik>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </LinearGradient>
   );
 };
-const style = StyleSheet.create({
-  main_container: {
-    flex: 1,
+
+const styles = StyleSheet.create({
+  scrollContainer: {
+    padding: 20,
+    paddingTop: 40,
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  logoImage: {
+    width: 120,
+    height: 120,
   },
   form_heading: {
     textAlign: 'center',
-    marginVertical: 5,
-    fontSize: 40,
+    fontSize: 36,
+    fontWeight: '700',
     color: 'white',
-    fontWeight: 500,
+    marginBottom: 8,
   },
-  inner_container: {
-    height: '100%',
+  subText: {
+    textAlign: 'center',
+    color: 'white',
+    opacity: 0.6,
+    fontSize: 14,
+    marginBottom: 25,
   },
   main_form_container: {
-    flex: 1,
-    justifyContent: 'center',
+    gap: 15,
+  },
+  inputWrapper: {
+    marginVertical: 5,
+  },
+  errorText: {
+    color: '#ef4444',
     marginHorizontal: 10,
+    marginTop: 5,
+    fontSize: 12,
   },
   form_button_main_container: {
     flexDirection: 'row',
     justifyContent: 'center',
+    gap: 10,
+    marginTop: 15,
+    flexWrap: 'wrap',
   },
-  button_containe: {
+  buttonContainer: {
     width: '40%',
-    marginLeft: 4,
-    marginRight: 5,
     marginVertical: 10,
   },
+  footerText: {
+    color: 'white',
+    opacity: 0.5,
+    fontSize: 12,
+    marginTop: 20,
+    textAlign: 'center',
+  },
 });
+
 export default Signin;

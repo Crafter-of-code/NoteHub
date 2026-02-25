@@ -22,6 +22,8 @@ export const appContext = React.createContext<{
   userDetail: userResponseType;
   editUserDetail: (data: { userName: string } | { userEmail: string }) => void;
   logoutFunction: () => void;
+  updatedNoteData: (id: number, updatedData: noteDataType) => void;
+  latestLogin: string;
 }>({
   reponseMessage: '',
   buttonDisable: false,
@@ -33,15 +35,18 @@ export const appContext = React.createContext<{
   addNote: (data: noteDataType) => {},
   deleteNote: (id: number) => {},
   getUserDetail: () => {},
-  userDetail: { userEmail: '', userName: '' },
+  userDetail: { userEmail: '', userName: '', createdAT: '' },
   editUserDetail: (data: { userName: string } | { userEmail: string }) => {},
   logoutFunction: () => {},
+  updatedNoteData: (id: number, updatedData: noteDataType) => {},
+  latestLogin: '',
 });
 export default function AppContextProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [latestLogin, setLatestLogin] = React.useState<string>('');
   const [buttonDisable, setButtonDisable] = React.useState<boolean>(false);
   const [reponseMessage, setResponseMessage] = React.useState<string>('');
   const [responseErrorStatus, setResponseErrorStatus] =
@@ -52,6 +57,7 @@ export default function AppContextProvider({
   const [userDetail, setUserDetail] = React.useState<userResponseType>({
     userEmail: '',
     userName: '',
+    createdAT: '',
   });
   //
   //----- default url
@@ -77,7 +83,6 @@ export default function AppContextProvider({
   async function signInSubmitHandler(values: singInType) {
     setButtonDisable(true);
     setButtonDisable(true);
-    console.log(values);
     const data = {
       userName: values.name,
       userEmail: values.email,
@@ -85,18 +90,15 @@ export default function AppContextProvider({
     };
     await axios
       .post(`${defaultUrl}/signin`, data)
-      .then(data => {
-        console.log('data has been sended and reviced');
-        console.log(data);
+      .then(response => {
+        responseSetter(false, 'you account has been seccessfully created');
         navigate('login');
       })
       .catch(err => {
-        console.log('We are facing some error');
-        console.log(err);
-      })
-      .finally(() => {
-        console.log('this is the finally method');
-        setButtonDisable(false);
+        responseSetter(
+          true,
+          'We found some difficulty while creating your account',
+        );
       });
   }
   async function logInSubmitHandler(values: logInType) {
@@ -111,22 +113,18 @@ export default function AppContextProvider({
         data,
       );
 
-      console.log(response.data);
-
       if (response?.data?.token) {
         AsyncStorage.setItem('Authorization', response.data.token);
-        console.log('token has been saved');
+        setLatestLogin(new Date().toLocaleDateString() /*.substring(4, 24)*/);
       }
 
       responseSetter(response.data.errorStatus, response.data.message);
 
       if (response.data.errorStatus !== true) {
-        navigate('home');
-        // push('home');
+        push('home');
         getAllNotes();
       }
     } catch (err) {
-      console.log(err);
       responseSetter(true, 'we are facing some error while logging in..');
     }
     setButtonDisable(false);
@@ -141,8 +139,6 @@ export default function AppContextProvider({
 
       setAllUserNote(response.data);
     } catch (err: any) {
-      console.log(err.response?.status);
-
       if (err.response?.status === 401) {
         navigate('login');
       }
@@ -157,24 +153,22 @@ export default function AppContextProvider({
   }
   async function addNote(data: noteDataType) {
     const token = await AsyncStorage.getItem('Authorization');
-    console.log(data);
-    try {
-      await axios
-        .post(`${defaultUrl}/addnote`, data, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(response => response.data)
-        .catch(err => console.log(err));
-    } catch (err) {
-      responseSetter(true, 'We got some problem while adding you note');
-    }
+    await axios
+      .post(`${defaultUrl}/addnote`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(response => {
+        responseSetter(response.data.errorStatus, response.data.message);
+      })
+      .catch(err =>
+        responseSetter(true, 'We got some problem while adding you note'),
+      );
     getAllNotes();
   }
   async function deleteNote(id: number) {
     const token = await AsyncStorage.getItem('Authorization');
-    console.log(id);
     await axios
       .delete(`${defaultUrl}/deletenote/${id.toString()}`, {
         headers: {
@@ -182,11 +176,9 @@ export default function AppContextProvider({
         },
       })
       .then(response => {
-        console.log(response);
         responseSetter(false, 'The message has been deleted successfully');
       })
       .catch(err => {
-        console.log(err);
         responseSetter(
           true,
           'we are facing some problem while delete your notez',
@@ -195,7 +187,6 @@ export default function AppContextProvider({
   }
   async function getUserDetail() {
     const token = await AsyncStorage.getItem('Authorization');
-    console.log(token);
     await axios
       .get(`${defaultUrl}/userdetails`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -205,7 +196,6 @@ export default function AppContextProvider({
         setUserDetail(response.data);
       })
       .catch(err => {
-        console.log(err);
         responseSetter(
           true,
           'We are facing some problem while getting your details',
@@ -227,13 +217,11 @@ export default function AppContextProvider({
       );
 
       const data: basicReponseType = response.data;
-      console.log(data);
       await responseSetter(data.errorStatus, data.message);
       if ('userEmail' in updatedUserDetail) {
         navigate('login');
       }
     } catch (err) {
-      console.log(err);
       responseSetter(
         true,
         'We are facing some problem while editing your detail',
@@ -241,10 +229,23 @@ export default function AppContextProvider({
     }
   }
   async function logoutFunction() {
-    console.log(await AsyncStorage.clear());
     push('welcome');
-    console.log(await AsyncStorage.getItem('Authorization'));
-    // console.log('logoutFunction has been build');
+  }
+  async function updatedNoteData(id: number, updatedData: noteDataType) {
+    await axios
+      .patch(`${defaultUrl}/note/${id}`, updatedData, {
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+        },
+      })
+      .then(response => {
+        responseSetter(false, response.data.message);
+        push('allnotes');
+        getUserDetail();
+      })
+      .catch(() => {
+        responseSetter(true, 'Unable to edit your note right now');
+      });
   }
   return (
     <appContext.Provider
@@ -262,6 +263,8 @@ export default function AppContextProvider({
         userDetail,
         editUserDetail,
         logoutFunction,
+        updatedNoteData,
+        latestLogin,
       }}
     >
       {children}

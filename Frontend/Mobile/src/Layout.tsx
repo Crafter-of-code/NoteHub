@@ -8,16 +8,8 @@ import ToastManager from 'toastify-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ResponseStatus from './components/ResponseStatus';
 const Layout = (): React.ReactElement => {
-  // useEffect(() => {
-  //   Toast.show({
-  //     type: 'success',
-  //     text1: 'Hello',
-  //     text2: 'This is a toast message 👋',
-  //   });
-  // }, []);
   return (
     <>
-      {/* <ToastManager /> */}
       <AppContextProvider>
         <ResponseStatus />
         <NavigationContainer ref={navigationRef}>

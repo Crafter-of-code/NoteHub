@@ -4,6 +4,9 @@ import Welcome from '../screens/Welcome';
 import Login from '../screens/Auth/Login';
 import Signin from '../screens/Auth/Signin';
 import DrawerNavigation from './DrawerNavigation';
+import AllNotes from '../screens/AllNotes';
+import EditNote from '../screens/EditNote';
+import { stackNavigationForBottomTabParamList } from '../types/ScreenNavigationTypes';
 export type stackParamList = {
   welcome: undefined;
   login: undefined;
@@ -24,6 +27,21 @@ const StackNavigation = (): React.ReactElement => {
       <stack.Screen name="signin" component={Signin} />
       <stack.Screen name="home" component={DrawerNavigation} />
     </stack.Navigator>
+  );
+};
+const stackNavigatorForBottomTab =
+  createStackNavigator<stackNavigationForBottomTabParamList>();
+export const StackNavigatorForBottomTab = (): React.ReactElement => {
+  return (
+    <stackNavigatorForBottomTab.Navigator
+      initialRouteName="allNote"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <stackNavigatorForBottomTab.Screen name="allNote" component={AllNotes} />
+      <stackNavigatorForBottomTab.Screen name="editNote" component={EditNote} />
+    </stackNavigatorForBottomTab.Navigator>
   );
 };
 export default StackNavigation;

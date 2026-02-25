@@ -12,148 +12,166 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import NoteContainer from '../components/NoteContainer';
 import { appContext } from '../store/AppContextProvider';
+import { navigate } from '../store/screenNavigate';
 
-const MyNotes = (): React.ReactElement => {
+const AllNotes = (): React.ReactElement => {
   const { allUserNote, getAllNotes, deleteNote } = React.useContext(appContext);
+
   useEffect(() => {
-    const fetch = async () => {
-      await getAllNotes();
-    };
-    fetch();
+    getAllNotes();
   }, []);
 
   return (
     <LinearGradient
       colors={['#09090b', '#18181b', '#000000']}
-      style={{ flex: 1 }}
+      style={styles.container}
     >
-      <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
-        {allUserNote.length == 0 ? (
+      <SafeAreaView style={{ flex: 1 }} edges={['bottom', 'top']}>
+        {allUserNote.length === 0 ? (
           <ScrollView
-            onScrollBeginDrag={async () => {
-              await getAllNotes();
-            }}
-            contentContainerStyle={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+            onScrollBeginDrag={getAllNotes}
+            contentContainerStyle={styles.emptyContainer}
           >
-            <Text style={{ color: 'white', fontSize: 18 }}>
-              You have no notes right now
-            </Text>
-            <Text style={{ color: 'white', fontSize: 15, opacity: 0.4 }}>
-              you can add note from the add not option below
+            <Text style={styles.emptyText}>You have no notes right now</Text>
+            <Text style={styles.emptySubText}>
+              You can add a note from the add note option below
             </Text>
           </ScrollView>
         ) : (
           <FlatList
-            contentContainerStyle={{
-              paddingTop: 50,
-              paddingBottom: 70,
-            }}
+            contentContainerStyle={styles.listContainer}
             data={allUserNote}
-            keyExtractor={items => items.noteId.toString()}
-            renderItem={({ item }) => {
-              return (
-                <>
-                  <NoteContainer>
-                    <View style={{ flexDirection: 'column' }}>
-                      <View>
-                        <Text
-                          style={[
-                            style.noteTitle,
-                            { color: 'white', textTransform: 'capitalize' },
-                          ]}
-                        >
-                          {item.noteTitle}
-                        </Text>
-                        <Text
-                          style={[style.noteDescription, { color: 'white' }]}
-                        >
-                          {item.noteContent}
-                        </Text>
-                      </View>
-                      {/* Starting of the button */}
-                      <View style={style.opButtonContainer}>
-                        <View style={[style.mainButtonContainer]}>
-                          <TouchableOpacity
-                            style={[style.noteOperationButtonStyling]}
-                          >
-                            <Image
-                              source={require('../asset/pencil.png')}
-                              style={[style.editButtonImage]}
-                            />
-                          </TouchableOpacity>
-                        </View>
-                        <View style={[style.mainButtonContainer]}>
-                          <TouchableOpacity
-                            style={[
-                              style.noteOperationButtonStyling,
-                              style.backgroundRedButton,
-                            ]}
-                            onPress={async () => {
-                              await deleteNote(item.noteId);
-                              await getAllNotes();
-                            }}
-                          >
-                            <Image
-                              source={require('../asset/bin.png')}
-                              style={[
-                                style.editButtonImage,
-                                style.deleteButton,
-                              ]}
-                            />
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    </View>
-                  </NoteContainer>
-                </>
-              );
-            }}
+            keyExtractor={item => item.noteId.toString()}
+            renderItem={({ item }) => (
+              <NoteContainer>
+                <View style={styles.noteContentContainer}>
+                  <View style={styles.noteTextContainer}>
+                    <Text style={styles.noteTitle}>{item.noteTitle}</Text>
+                    <Text style={styles.noteDescription}>
+                      {item.noteContent}
+                    </Text>
+                  </View>
+
+                  <View style={styles.opButtonContainer}>
+                    <TouchableOpacity
+                      style={[
+                        styles.noteOperationButtonStyling,
+                        styles.editButtonBackground,
+                      ]}
+                      onPress={() => navigate('editNote', { id: item.noteId })}
+                    >
+                      <Image
+                        source={require('../asset/pencil.png')}
+                        style={styles.editButtonImage}
+                      />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[
+                        styles.noteOperationButtonStyling,
+                        styles.backgroundRedButton,
+                      ]}
+                      onPress={async () => {
+                        await deleteNote(item.noteId);
+                        await getAllNotes();
+                      }}
+                    >
+                      <Image
+                        source={require('../asset/bin.png')}
+                        style={styles.deleteButton}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </NoteContainer>
+            )}
           />
         )}
       </SafeAreaView>
     </LinearGradient>
   );
 };
-const style = StyleSheet.create({
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  emptyText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  emptySubText: {
+    color: 'white',
+    fontSize: 16,
+    opacity: 0.5,
+    textAlign: 'center',
+  },
+  listContainer: {
+    paddingHorizontal: 15,
+    paddingTop: 20,
+    paddingBottom: 80,
+  },
+  noteContentContainer: {
+    flexDirection: 'column',
+  },
+  noteTextContainer: {},
+  noteTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: 'white',
+    textTransform: 'capitalize',
+    marginBottom: 5,
+  },
+  noteDescription: {
+    fontSize: 16,
+    fontWeight: '400',
+    color: 'white',
+  },
   opButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-  },
-  noteTitle: {
-    fontSize: 20,
-    fontWeight: 600,
-  },
-  noteDescription: {
-    fontSize: 15,
-    fontWeight: 500,
-  },
-  mainButtonContainer: {
-    marginHorizontal: 5,
+    alignItems: 'center',
+    gap: 12,
+    marginTop: 10,
   },
   noteOperationButtonStyling: {
     borderRadius: 50,
-    height: 30,
-    width: 30,
-    backgroundColor: 'white',
+    height: 40,
+    width: 40,
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.5,
+    elevation: 5,
   },
   backgroundRedButton: {
     backgroundColor: '#FF5C5C',
   },
   editButtonImage: {
-    height: 13,
-    width: 13,
-  },
-  deleteButton: {
-    height: 18,
-    width: 18,
+    height: 15,
+    width: 15,
     tintColor: 'white',
   },
+  deleteButton: {
+    height: 15,
+    width: 15,
+    tintColor: 'white',
+  },
+
+  editButtonBackground: {
+    backgroundColor: '#4CA1AF', // subtle accent color
+  },
 });
-export default MyNotes;
+
+export default AllNotes;
