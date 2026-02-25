@@ -11,6 +11,7 @@ import { SetSeoService } from '../../../services/seo/set-seo.service';
 import { singinPageSeo } from '../../../constants/seoData';
 import { HttpService } from '../../../services/http/http.service';
 import { ResponseStatusComponent } from '../../../components/response-status/response-status.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
@@ -27,7 +28,11 @@ export class SigninComponent implements OnInit {
   button_disable: Boolean = false;
   errorStatus = false;
   reponseMessage = '';
-  constructor(private seo: SetSeoService, private http: HttpService) {}
+  constructor(
+    private seo: SetSeoService,
+    private http: HttpService,
+    private nav: Router
+  ) {}
   ngOnInit(): void {
     this.seo.setSeo(singinPageSeo);
   }
@@ -64,7 +69,9 @@ export class SigninComponent implements OnInit {
             this.errorStatus = data.errorStatus;
             this.reponseMessage = data.message;
             this.button_disable = false;
+
             setTimeout(() => {
+              this.nav.navigate(['/', 'login']);
               this.errorStatus = false;
               this.reponseMessage = '';
             }, 2000);

@@ -48,6 +48,7 @@ export class HomeComponent implements OnInit {
         this.errorStatus = true;
         this.reponseMessage =
           'we are facing some problem while communicating to our server';
+        this.nav.navigate(['/']);
         setTimeout(() => {
           this.errorStatus = false;
           this.reponseMessage = '';
