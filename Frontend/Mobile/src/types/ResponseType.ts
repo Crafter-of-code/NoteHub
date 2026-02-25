@@ -1,4 +1,4 @@
-import { boolean, string } from 'yup';
+// import { boolean, string } from 'yup';
 
 export type basicReponseType = {
   errorStatus?: boolean;
@@ -11,4 +11,8 @@ export type noteResponseType = {
   noteTitle: string;
   noteContent: string;
   createAt: Date;
-}[];
+};
+export type userResponseType = {
+  userEmail: string;
+  userName: string;
+};

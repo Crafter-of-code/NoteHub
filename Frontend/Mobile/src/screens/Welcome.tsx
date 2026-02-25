@@ -47,10 +47,18 @@ const Welcome = (): React.ReactElement => {
         />
         <View style={styles.button_main_container}>
           <View style={styles.button_container}>
-            <SolidButton title="Login" opFunc={loginHandler} />
+            <SolidButton
+              title="Login"
+              opFunc={loginHandler}
+              buttonDisable={false}
+            />
           </View>
           <View style={styles.button_container}>
-            <SolidButton title="New here!" opFunc={signinHandler} />
+            <SolidButton
+              title="New here!"
+              opFunc={signinHandler}
+              buttonDisable={false}
+            />
           </View>
         </View>
       </SafeAreaView>

@@ -1,17 +1,41 @@
 import React from 'react';
-import { logInType, singInType } from '../types/RequestTypes';
-import axios, { AxiosResponse } from 'axios';
-import { navigate } from './screenNavigate';
-import { basicReponseType, noteResponseType } from '../types/ResponseType';
+import { logInType, noteDataType, singInType } from '../types/RequestTypes';
+import axios, { Axios, AxiosResponse } from 'axios';
+import { navigate, push } from './screenNavigate';
+import {
+  basicReponseType,
+  noteResponseType,
+  userResponseType,
+} from '../types/ResponseType';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-export const appContext = React.createContext({
+export const appContext = React.createContext<{
+  reponseMessage: string;
+  buttonDisable: boolean;
+  responseErrorStatus: boolean;
+  allUserNote: noteResponseType[];
+  signInSubmitHandler: (values: singInType) => void;
+  logInSubmitHandler: (values: logInType) => void;
+  getAllNotes: () => void;
+  addNote: (data: noteDataType) => void;
+  deleteNote: (id: number) => void;
+  getUserDetail: () => void;
+  userDetail: userResponseType;
+  editUserDetail: (data: { userName: string } | { userEmail: string }) => void;
+  logoutFunction: () => void;
+}>({
   reponseMessage: '',
   buttonDisable: false,
   responseErrorStatus: false,
-  allUserNote: [] as Array<noteResponseType>,
+  allUserNote: [],
   signInSubmitHandler: (values: singInType) => {},
   logInSubmitHandler: (values: logInType) => {},
-  getAllNotes: () => Promise.resolve({} as noteResponseType),
+  getAllNotes: () => {},
+  addNote: (data: noteDataType) => {},
+  deleteNote: (id: number) => {},
+  getUserDetail: () => {},
+  userDetail: { userEmail: '', userName: '' },
+  editUserDetail: (data: { userName: string } | { userEmail: string }) => {},
+  logoutFunction: () => {},
 });
 export default function AppContextProvider({
   children,
@@ -25,14 +49,20 @@ export default function AppContextProvider({
   const [allUserNote, setAllUserNote] = React.useState<Array<noteResponseType>>(
     [],
   );
+  const [userDetail, setUserDetail] = React.useState<userResponseType>({
+    userEmail: '',
+    userName: '',
+  });
   //
   //----- default url
   //
   const defaultUrl = 'http://localhost:8080/api';
-  const token = AsyncStorage.getItem('Authorization');
   //--
   //--
   //--
+  async function getToken() {
+    return await AsyncStorage.getItem('Authorization');
+  }
   function responseSetter(
     responseErrorStatus: boolean = true,
     responseMessage: string = '',
@@ -42,7 +72,7 @@ export default function AppContextProvider({
     setTimeout(() => {
       setResponseErrorStatus(true);
       setResponseMessage('');
-    }, 3000);
+    }, 2000);
   }
   async function signInSubmitHandler(values: singInType) {
     setButtonDisable(true);
@@ -92,6 +122,7 @@ export default function AppContextProvider({
 
       if (response.data.errorStatus !== true) {
         navigate('home');
+        // push('home');
         getAllNotes();
       }
     } catch (err) {
@@ -100,25 +131,120 @@ export default function AppContextProvider({
     }
     setButtonDisable(false);
   }
-  async function getAllNotes(): Promise<noteResponseType> {
-    const token = await AsyncStorage.getItem('Authorization');
-    console.log(token);
-    const response = await axios
-      .get(`${defaultUrl}/home`, {
+  async function getAllNotes() {
+    try {
+      const token = await AsyncStorage.getItem('Authorization');
+
+      const response = await axios.get(`${defaultUrl}/home`, {
         headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setAllUserNote(response.data);
+    } catch (err: any) {
+      console.log(err.response?.status);
+
+      if (err.response?.status === 401) {
+        navigate('login');
+      }
+
+      responseSetter(
+        true,
+        'We are facing some error while fetching your notes \n LOGIN AGAIN',
+      );
+
+      return {} as noteResponseType;
+    }
+  }
+  async function addNote(data: noteDataType) {
+    const token = await AsyncStorage.getItem('Authorization');
+    console.log(data);
+    try {
+      await axios
+        .post(`${defaultUrl}/addnote`, data, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(response => response.data)
+        .catch(err => console.log(err));
+    } catch (err) {
+      responseSetter(true, 'We got some problem while adding you note');
+    }
+    getAllNotes();
+  }
+  async function deleteNote(id: number) {
+    const token = await AsyncStorage.getItem('Authorization');
+    console.log(id);
+    await axios
+      .delete(`${defaultUrl}/deletenote/${id.toString()}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(response => {
+        console.log(response);
+        responseSetter(false, 'The message has been deleted successfully');
       })
       .catch(err => {
-        console.log(err.status);
+        console.log(err);
         responseSetter(
           true,
-          'We are facing some error while fetching your notes \n LOGIN AGAIN',
+          'we are facing some problem while delete your notez',
         );
-        if (err.status) {
-          navigate('login');
-        }
       });
-    console.log(response?.data);
-    return response?.data || ({} as noteResponseType);
+  }
+  async function getUserDetail() {
+    const token = await AsyncStorage.getItem('Authorization');
+    console.log(token);
+    await axios
+      .get(`${defaultUrl}/userdetails`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(response => {
+        console.log(response.data);
+        setUserDetail(response.data);
+      })
+      .catch(err => {
+        console.log(err);
+        responseSetter(
+          true,
+          'We are facing some problem while getting your details',
+        );
+      });
+  }
+  async function editUserDetail(
+    updatedUserDetail: { userName: string } | { userEmail: string },
+  ) {
+    try {
+      const token = await AsyncStorage.getItem('Authorization');
+
+      const response = await axios.put(
+        `${defaultUrl}/update-user-name`,
+        updatedUserDetail,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      const data: basicReponseType = response.data;
+      console.log(data);
+      await responseSetter(data.errorStatus, data.message);
+      if ('userEmail' in updatedUserDetail) {
+        navigate('login');
+      }
+    } catch (err) {
+      console.log(err);
+      responseSetter(
+        true,
+        'We are facing some problem while editing your detail',
+      );
+    }
+  }
+  async function logoutFunction() {
+    console.log(await AsyncStorage.clear());
+    push('welcome');
+    console.log(await AsyncStorage.getItem('Authorization'));
+    // console.log('logoutFunction has been build');
   }
   return (
     <appContext.Provider
@@ -130,6 +256,12 @@ export default function AppContextProvider({
         responseErrorStatus,
         getAllNotes,
         allUserNote,
+        addNote,
+        deleteNote,
+        getUserDetail,
+        userDetail,
+        editUserDetail,
+        logoutFunction,
       }}
     >
       {children}

@@ -4,6 +4,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 interface props {
   title?: string;
   opFunc?: () => void | any;
+  children?: React.ReactNode;
 }
 const OutlineButton = (props: props): React.ReactElement => {
   return (
@@ -13,7 +14,12 @@ const OutlineButton = (props: props): React.ReactElement => {
         activeOpacity={0.6}
         onPress={props.opFunc}
       >
-        <Text style={[style.button_text]}>{props.title}</Text>
+        {props.title ? (
+          <Text style={[style.button_text]}>{props.title}</Text>
+        ) : (
+          ''
+        )}
+        {props.children}
       </TouchableOpacity>
     </>
   );
@@ -21,7 +27,7 @@ const OutlineButton = (props: props): React.ReactElement => {
 const style = StyleSheet.create({
   button: {
     width: '100%',
-    margin: 5,
+    // margin: 5,
     borderWidth: 2,
     borderColor: '#66aa6e',
     borderRadius: 8,

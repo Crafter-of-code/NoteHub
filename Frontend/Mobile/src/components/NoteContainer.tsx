@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 type props = {
   title?: string;
@@ -13,8 +13,8 @@ const NoteContainer = ({
   return (
     <>
       <View style={styles.main_container}>
-        <Text style={styles.title_color}>{title}</Text>
-        <Text style={styles.message_color}>{message}</Text>
+        {title ? <Text style={styles.title_color}>{title}</Text> : ''}
+        {message ? <Text style={styles.message_color}>{message}</Text> : ''}
         {children ? <View style={styles.logo_container}>{children}</View> : ''}
       </View>
     </>
@@ -22,7 +22,8 @@ const NoteContainer = ({
 };
 const styles = StyleSheet.create({
   main_container: {
-    padding: 24,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
     backgroundColor: '#262527',
     borderRadius: 8,
     marginVertical: 10,
@@ -41,8 +42,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   logo_container: {
-    justifyContent: 'center',
-    flexDirection: 'row',
+    // justifyContent: 'center',
+    // flexDirection: 'row',
   },
 });
 export default NoteContainer;
