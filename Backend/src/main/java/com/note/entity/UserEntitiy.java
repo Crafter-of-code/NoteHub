@@ -3,13 +3,21 @@ package com.note.entity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.stereotype.Component;
-
+import java.util.List;
 import java.time.LocalDateTime;
 
 @Component
 @Entity
 @Table(name = "Users")
 public class UserEntitiy {
+    public List<NoteEntity> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<NoteEntity> notes) {
+        this.notes = notes;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
@@ -17,7 +25,10 @@ public class UserEntitiy {
     @Column(unique = true)
     private String userEmail;
     private String userPassword;
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NoteEntity> notes;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -26,8 +37,6 @@ public class UserEntitiy {
         this.createdAt = createdAt;
     }
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
 
     public long getUserId() {
         return userId;

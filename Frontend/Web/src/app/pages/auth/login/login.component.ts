@@ -43,14 +43,14 @@ export class LoginComponent {
         next: (data) => {
           if (data.token) {
             localStorage.setItem('token', `Bearer ${data.token}`);
-            this.reponseMessage = data.message;
+            this.reponseMessage = data.message || '';
             this.errorStatus = data.errorStatus ?? false;
             setTimeout(() => {
               return this.route.navigate(['home']);
             }, 2000);
           } else {
-            this.reponseMessage = data.message;
-            this.errorStatus = data.errorStatus;
+            this.reponseMessage = data.message || '';
+            this.errorStatus = data.errorStatus || false;
             setTimeout(() => {
               this.errorStatus = false;
               this.reponseMessage = '';

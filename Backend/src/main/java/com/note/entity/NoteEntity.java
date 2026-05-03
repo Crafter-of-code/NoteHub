@@ -15,9 +15,18 @@ public class NoteEntity {
     private String noteContent;
     @CreationTimestamp
     private LocalDateTime createAt;
+
+    public UserEntitiy getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntitiy user) {
+        this.user = user;
+    }
+
     @ManyToOne
-    @JoinColumn(name = "user_id",nullable = false)
-    private UserEntitiy userId;
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntitiy user;
 
     public long getNoteId() {
         return noteId;
@@ -49,13 +58,5 @@ public class NoteEntity {
 
     public void setNoteContent(String noteContent) {
         this.noteContent = noteContent;
-    }
-
-    public UserEntitiy getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UserEntitiy user) {
-        this.userId = user;
     }
 }

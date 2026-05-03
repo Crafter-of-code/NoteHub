@@ -27,7 +27,7 @@ public class NoteService {
     public List<NoteResponseModel> getAllNotes(String token) {
         UserEntitiy userData = userRepository.findByUserEmail(jwtUtil.extractUserName(token))
                 .orElseThrow(() -> new RuntimeException("user note found"));
-        List<NoteEntity> noteData = noteRepository.findByUserId(userData);
+        List<NoteEntity> noteData = noteRepository.findByUser(userData);
         // return noteData;
         return noteData.stream().map(item -> new NoteResponseModel(item.getNoteId(),
                 item.getNoteTitle(),
@@ -39,7 +39,7 @@ public class NoteService {
         try {
             UserEntitiy userData = userRepository.findByUserEmail(jwtUtil.extractUserName(header))
                     .orElseThrow(() -> new RuntimeException("we are facing some problem"));
-            noteData.setUserId(userData);
+            noteData.setUser(userData);
             noteRepository.save(noteData);
             return "Note has been added successfully";
         } catch (Exception e) {

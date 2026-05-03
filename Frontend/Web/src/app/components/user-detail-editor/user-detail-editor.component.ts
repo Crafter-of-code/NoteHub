@@ -65,7 +65,6 @@ export class UserDetailEditorComponent implements OnInit {
               'we are facing some problem while updating you detail',
           });
         }
-        console.log(err);
       },
       complete: () => {
         this.buttonDisabled = false;

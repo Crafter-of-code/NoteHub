@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   addNoteDataType,
+  responseDataType,
   singleNoteDataType,
   userDataFromServer,
 } from '../../types/dataTypes';
@@ -10,17 +11,10 @@ import {
 type loginSeccessesMessage = {
   message: string;
 };
-export type responseDataType = {
-  errorStatus: boolean;
-  message: string;
-  token: string;
-  userId: number;
-};
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
-  token = localStorage.getItem('token');
   defaultRoute: string = 'http://localhost:8080/api';
   constructor(
     private http: HttpClient,
@@ -33,67 +27,82 @@ export class HttpService {
     return this.http.post<responseDataType>(`${this.defaultRoute}/login`, data);
   }
   getHomeData() {
-    const authheaders = new HttpHeaders({
-      Authorization: `${this.token}`,
-    });
-    return this.http.get<any>(`${this.defaultRoute}/home`, {
-      headers: authheaders,
-    });
+    // const authheaders = new HttpHeaders({
+    //   Authorization: `${token}`,
+    // });
+    return this.http.get<any>(
+      `${this.defaultRoute}/notes`
+      //   {
+      //   headers: authheaders,
+      // }
+    );
   }
   addNote(data: addNoteDataType) {
-    const headers = new HttpHeaders({
-      Authorization: `${this.token}`,
-    });
+    // const token = localStorage.getItem('token');
+    // const headers = new HttpHeaders({
+    //   Authorization: `${token}`,
+    // });
     return this.http.post<responseDataType>(
-      `${this.defaultRoute}/addnote`,
-      data,
-      { headers }
+      `${this.defaultRoute}/note`,
+      data
+      // { headers }
     );
   }
   deleteNote(id: number) {
-    const headers = new HttpHeaders({
-      Authorization: `${this.token}`,
-    });
+    // const headers = new HttpHeaders({
+    //   Authorization: `${token}`,
+    // });
     return this.http.delete<responseDataType>(
-      `${this.defaultRoute}/deletenote/${id}`,
-      { headers }
+      `${this.defaultRoute}/note/${id}`
+      // { headers }
     );
   }
   getSingleNote(id: number) {
-    const headers = new HttpHeaders({
-      Authorization: `${this.token}`,
-    });
+    // const token = localStorage.getItem('token');
+    // const headers = new HttpHeaders({
+    //   Authorization: `${token}`,
+    // });
     return this.http.get<singleNoteDataType>(
-      `${this.defaultRoute}/notes/${id}`,
-      {
-        headers,
-      }
+      `${this.defaultRoute}/note/${id}`
+      // {
+      //   headers,
+      // }
     );
   }
   updateNote(id: number, updatedNote: addNoteDataType) {
+    // const token = localStorage.getItem('token');
+    // const header = new HttpHeaders({
+    //   Authorization: `${token}`,
+    // });
     return this.http.patch<responseDataType>(
       `${this.defaultRoute}/note/${id}`,
-      updatedNote,
-      { headers: { Authorization: `${this.token}` } }
+      updatedNote
+      // { headers: { Authorization: `${token}` } }
     );
   }
   getUserDetail() {
-    const authHeader = new HttpHeaders({
-      Authorization: `${this.token}`,
-    });
+    // const token = localStorage.getItem('token');
+    // const authHeader = new HttpHeaders({
+    //   Authorization: `${token}`,
+    // });
     return this.http.get<userDataFromServer>(
-      `${this.defaultRoute}/userdetails`,
-      {
-        headers: authHeader,
-      }
+      `${this.defaultRoute}/userdetails`
+      // {
+      //   headers: authHeader,
+      // }
     );
   }
   updateUserDetail(data: { userName: string }) {
-    const authHeader = new HttpHeaders({
-      Authorization: `${this.token}`,
-    });
-    return this.http.put(`${this.defaultRoute}/update-user-name`, data, {
-      headers: authHeader,
-    });
+    // const token = localStorage.getItem('token');
+    // const authHeader = new HttpHeaders({
+    //   Authorization: `${token}`,
+    // });
+    return this.http.put(
+      `${this.defaultRoute}/update-user-name`,
+      data
+      //   {
+      //   headers: authHeader,
+      // }
+    );
   }
 }

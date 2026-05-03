@@ -18,7 +18,9 @@ public class JwtUtil {
         return Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+//                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // one hour
+//                .expiration(new Date(System.currentTimeMillis() + 5000))  // 5 sec for testing
+                .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24)) // one day
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)))
                 .compact();
     }

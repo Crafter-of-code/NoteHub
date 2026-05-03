@@ -51,7 +51,6 @@ public class AuthService {
             return  rm;
 
         }
-//        d
     }
 
     public ResponseModel signIn(UserEntitiy data) {

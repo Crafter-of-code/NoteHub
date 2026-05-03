@@ -48,7 +48,6 @@ export class HomeComponent implements OnInit {
         this.errorStatus = true;
         this.reponseMessage =
           'we are facing some problem while communicating to our server';
-        this.nav.navigate(['/']);
         setTimeout(() => {
           this.errorStatus = false;
           this.reponseMessage = '';
@@ -65,8 +64,8 @@ export class HomeComponent implements OnInit {
   deleteButtonHandler(id: number) {
     this.http.deleteNote(id).subscribe({
       next: (data) => {
-        this.errorStatus = data.errorStatus;
-        this.reponseMessage = data.message;
+        this.errorStatus = data.errorStatus || true;
+        this.reponseMessage = data.message || '';
         setTimeout(() => {
           this.errorStatus = false;
           this.reponseMessage = '';

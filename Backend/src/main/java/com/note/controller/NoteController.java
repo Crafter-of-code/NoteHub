@@ -20,15 +20,18 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    @GetMapping("/home")
-    public ResponseEntity<List<NoteResponseModel/* NoteEntity */>> getAllNotes(HttpServletRequest request) {
+    @GetMapping("/notes")
+    public ResponseEntity<List<NoteResponseModel>> getAllNotes(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
-        String authoriationHeader = header.substring(7);
-        List<NoteResponseModel/* NoteEntity */> notes = noteService.getAllNotes(authoriationHeader);
+        if (header == null || !header.startsWith("Bearer ")) {
+            throw new RuntimeException("Invalid or missing Authorization header");
+        }
+        String token = header.substring(7).trim();
+        List<NoteResponseModel> notes = noteService.getAllNotes(token);
         return ResponseEntity.ok().body(notes);
     }
 
-    @PostMapping("/addnote")
+    @PostMapping("/note")
     public ResponseEntity<ResponseModel> addNote(@RequestBody NoteEntity data,
             @RequestHeader("Authorization") String header) {
         String token = header.substring(7);
@@ -39,7 +42,7 @@ public class NoteController {
         return ResponseEntity.ok().body(rm);
     }
 
-    @DeleteMapping("/deletenote/{id}")
+    @DeleteMapping("/note/{id}")
     public ResponseEntity<ResponseModel> deleteNote(@PathVariable String id) {
         ResponseModel rm = noteService.deleteNote(Long.parseLong(id));
         if (rm.getErrorStatus()) {
@@ -49,7 +52,7 @@ public class NoteController {
         }
     }
 
-    @GetMapping("/notes/{id}")
+    @GetMapping("/note/{id}")
     public ResponseEntity<NoteResponseModel> getSingleNote(@PathVariable String id) {
         NoteResponseModel nrm = noteService.getSingleNote(Long.parseLong(id));
         return ResponseEntity.ok().body(nrm);

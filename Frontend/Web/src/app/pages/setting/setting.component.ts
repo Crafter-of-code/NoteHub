@@ -29,6 +29,7 @@ export class SettingComponent implements OnInit {
   editOperation: string = '';
   defaultValueToEdit: string = '';
   constructor(
+    private nav: Router,
     private seo: SetSeoService,
     private http: HttpService,
     private router: Router
@@ -53,6 +54,11 @@ export class SettingComponent implements OnInit {
           true,
           'we are facing some error while getting the user detail'
         );
+        if (err.status == 403) {
+          if (err.status === 403) {
+            this.nav.navigate(['/login']);
+          }
+        }
       },
     });
   }
