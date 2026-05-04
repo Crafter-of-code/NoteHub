@@ -152,7 +152,7 @@ describe('HttpService', () => {
 
     service.updateUserDetail(data).subscribe();
 
-    const req = httpMock.expectOne(`${baseUrl}/update-user-name`);
+    const req = httpMock.expectOne(`${baseUrl}/userdetails`);
     expect(req.request.method).toBe('PUT');
     expect(req.request.body).toEqual(data);
 

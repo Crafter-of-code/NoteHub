@@ -25,7 +25,7 @@ public class UserController {
         UserDetailResponse udr = userService.getUserDetailServcie(token);
         return  ResponseEntity.ok().body(udr);
     }
-    @PutMapping("/update-user-name")
+    @PutMapping("/userdetails")
     public ResponseEntity<ResponseModel> updateUserName(@RequestHeader("Authorization") String header,
                                                         @RequestBody @NotNull Map<String,String> userUpdatedDetail){
         List<String> li = new ArrayList<String>(userUpdatedDetail.keySet());

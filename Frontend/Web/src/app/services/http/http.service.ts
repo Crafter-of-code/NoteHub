@@ -98,7 +98,7 @@ export class HttpService {
     //   Authorization: `${token}`,
     // });
     return this.http.put(
-      `${this.defaultRoute}/update-user-name`,
+      `${this.defaultRoute}/userdetails`,
       data
       //   {
       //   headers: authHeader,

@@ -207,9 +207,11 @@ export default function AppContextProvider({
   ) {
     try {
       const token = await AsyncStorage.getItem('Authorization');
-
+      {
+        /* update-user-name */
+      }
       const response = await axios.put(
-        `${defaultUrl}/update-user-name`,
+        `${defaultUrl}/userdetails`,
         updatedUserDetail,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -221,6 +223,7 @@ export default function AppContextProvider({
       if ('userEmail' in updatedUserDetail) {
         navigate('login');
       }
+      getUserDetail();
     } catch (err) {
       responseSetter(
         true,

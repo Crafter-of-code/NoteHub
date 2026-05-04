@@ -68,6 +68,7 @@ export class UserDetailEditorComponent implements OnInit {
       },
       complete: () => {
         this.buttonDisabled = false;
+        this.toggleHandler.emit(false);
       },
     });
   }
