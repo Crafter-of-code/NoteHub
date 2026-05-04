@@ -6,8 +6,8 @@ export const initialValueOfSignin = {
   confirmPassword: '',
 };
 export const initialValueOfLogin = {
-  email: 'khan3@gmail.com',
-  password: '1234567890',
+  email: '',
+  password: '',
 };
 export const SigninValidator = yup.object({
   name: yup.string().min(3).max(10).required('This is required field'),

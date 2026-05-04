@@ -133,7 +133,7 @@ export default function AppContextProvider({
     try {
       const token = await AsyncStorage.getItem('Authorization');
 
-      const response = await axios.get(`${defaultUrl}/home`, {
+      const response = await axios.get(`${defaultUrl}/notes`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -154,7 +154,7 @@ export default function AppContextProvider({
   async function addNote(data: noteDataType) {
     const token = await AsyncStorage.getItem('Authorization');
     await axios
-      .post(`${defaultUrl}/addnote`, data, {
+      .post(`${defaultUrl}/note`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -170,7 +170,7 @@ export default function AppContextProvider({
   async function deleteNote(id: number) {
     const token = await AsyncStorage.getItem('Authorization');
     await axios
-      .delete(`${defaultUrl}/deletenote/${id.toString()}`, {
+      .delete(`${defaultUrl}/note/${id.toString()}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
