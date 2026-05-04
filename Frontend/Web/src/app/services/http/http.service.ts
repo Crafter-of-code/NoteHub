@@ -15,7 +15,8 @@ type loginSeccessesMessage = {
   providedIn: 'root',
 })
 export class HttpService {
-  defaultRoute: string = 'http://localhost:8080/api';
+  // defaultRoute: string = 'http://localhost:8080/api';
+  defaultRoute: string = 'https://backend-notehub-com.onrender.com/api';
   constructor(
     private http: HttpClient,
     private activatedRoute: ActivatedRoute
