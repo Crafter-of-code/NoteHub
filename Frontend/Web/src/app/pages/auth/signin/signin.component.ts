@@ -50,47 +50,56 @@ export class SigninComponent implements OnInit {
     checkBox: new FormControl(false, Validators.required),
   });
   signinHandler() {
-    this.button_disable = false;
-    if (this.signinForm.valid) {
-      if (
-        this.signinForm.get('password')?.value !=
-        this.signinForm.get('confirmPassword')?.value
-      ) {
-        console.error('you password is not same');
-        this.signinForm.invalid;
-      } else {
-        const data = {
-          userName: this.signinForm.get('name')?.value,
-          userEmail: this.signinForm.get('email')?.value,
-          userPassword: this.signinForm.get('password')?.value,
-        };
-        this.http.signIn(data).subscribe({
-          next: (data) => {
-            this.errorStatus = data.errorStatus;
-            this.reponseMessage = data.message;
-            this.button_disable = false;
+    this.button_disable = true;
 
-            setTimeout(() => {
-              this.nav.navigate(['/', 'login']);
-              this.errorStatus = false;
-              this.reponseMessage = '';
-            }, 2000);
-          },
-          error: (data) => {
-            this.reponseMessage = 'problem while communicating to the backed';
-            this.button_disable = false;
-            setTimeout(() => {
-              this.reponseMessage = '';
-            }, 3000);
-          },
-        });
-      }
-    } else {
+    if (!this.signinForm.valid) {
       this.errorStatus = true;
       this.reponseMessage = 'please check your data';
+
       setTimeout(() => {
         this.reponseMessage = '';
+        this.errorStatus = false;
+        this.button_disable = false;
       }, 3000);
+
+      return;
     }
+
+    if (
+      this.signinForm.get('password')?.value !==
+      this.signinForm.get('confirmPassword')?.value
+    ) {
+      console.error('you password is not same');
+      this.button_disable = false;
+      return;
+    }
+
+    const data = {
+      userName: this.signinForm.get('name')?.value,
+      userEmail: this.signinForm.get('email')?.value,
+      userPassword: this.signinForm.get('password')?.value,
+    };
+
+    this.http.signIn(data).subscribe({
+      next: (data) => {
+        this.errorStatus = data.errorStatus;
+        this.reponseMessage = data.message;
+
+        setTimeout(() => {
+          this.nav.navigate(['/', 'login'], { replaceUrl: true });
+          this.errorStatus = false;
+          this.reponseMessage = '';
+          this.button_disable = false;
+        }, 2000);
+      },
+      error: () => {
+        this.reponseMessage = 'problem while communicating to the backed';
+
+        setTimeout(() => {
+          this.reponseMessage = '';
+          this.button_disable = false;
+        }, 3000);
+      },
+    });
   }
 }

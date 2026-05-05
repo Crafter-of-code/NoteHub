@@ -41,16 +41,48 @@
       </div>
     </div>
     <div class="flex gap-4">
-      <app-solid-button
-        button-one
-        buttonHeading="Login"
-        (clicked)="loginButtonHandler()"
-      />
-      <app-outline-button
-        button-two
-        buttonHeading="Creaet a new Account"
-        (clicked)="singinButtonHandle()"
-      />
+      <div
+        *ngIf="
+          serverCheckButtonStatus() == false;
+          else serverIsRunningForSolidButton
+        "
+      >
+        <app-solid-button
+          button-one
+          [buttonHeading]="loginButtonHeading"
+          (clicked)="loginButtonHandler()"
+          [buttonDisabled]="serverCheckButtonStatus()"
+        />
+      </div>
+      <ng-template #serverIsRunningForSolidButton>
+        <app-solid-button
+          button-one
+          [buttonHeading]="loginButtonHeading"
+          (clicked)="loginButtonHandler()"
+          [buttonDisabled]="serverCheckButtonStatus()"
+        />
+      </ng-template>
+      <div
+        *ngIf="
+          serverCheckButtonStatus() == false;
+          else serverIsRunningForOutlineButton
+        "
+      >
+        <app-outline-button
+          button-two
+          [buttonHeading]="signinButtonHeading"
+          (clicked)="singinButtonHandle()"
+          [disabled]="false"
+        />
+      </div>
+      <ng-template #serverIsRunningForOutlineButton
+        ><app-outline-button
+          button-two
+          [buttonHeading]="signinButtonHeading"
+          (clicked)="singinButtonHandle()"
+          [disabled]="true"
+        />
+      </ng-template>
     </div>
   </main>
 </div>

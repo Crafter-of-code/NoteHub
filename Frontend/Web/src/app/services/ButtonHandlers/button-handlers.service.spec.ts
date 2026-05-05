@@ -27,12 +27,10 @@ describe('ButtonHandlersService', () => {
     expect(service.initizalHeaderButton).toBeFalse();
   });
 
-  it('should navigate to login page with replaceUrl true', () => {
+  it('should navigate to login page', () => {
     service.goToLoginPage();
 
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['login'], {
-      replaceUrl: true,
-    });
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['login']);
   });
 
   it('should navigate to signin page', () => {
@@ -63,5 +61,9 @@ describe('ButtonHandlersService', () => {
     service.getToSettingPage();
 
     expect(service.initizalHeaderButton).toBe(initial);
+  });
+
+  afterEach(() => {
+    routerSpy.navigate.calls.reset();
   });
 });

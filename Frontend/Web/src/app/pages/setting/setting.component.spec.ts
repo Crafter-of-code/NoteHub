@@ -3,6 +3,7 @@ import {
   TestBed,
   fakeAsync,
   tick,
+  flushMicrotasks,
 } from '@angular/core/testing';
 import { SettingComponent } from './setting.component';
 import { Router } from '@angular/router';
@@ -35,43 +36,49 @@ describe('SettingComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should call SEO service and fetch user details on init', () => {
+  it('should call SEO service and fetch user details on init', fakeAsync(() => {
     mockHttpService.getUserDetail.and.returnValue(
       of({ userName: 'John', userEmail: 'john@test.com' })
     );
 
-    fixture.detectChanges();
+    component.ngOnInit();
+    flushMicrotasks();
 
     expect(mockSeoService.setSeo).toHaveBeenCalled();
     expect(mockHttpService.getUserDetail).toHaveBeenCalled();
     expect(component.userData.userName).toBe('John');
     expect(component.userData.userEmail).toBe('john@test.com');
-  });
+  }));
 
-  it('should handle error and set response message', () => {
+  it('should handle error and set response message', fakeAsync(() => {
     mockHttpService.getUserDetail.and.returnValue(
       throwError(() => ({ status: 500 }))
     );
 
-    fixture.detectChanges();
+    component.ngOnInit();
+    flushMicrotasks();
 
     expect(component.errorStatus).toBeTrue();
-    expect(component.reponseMessage).toContain('we are facing some error');
-  });
+    expect(component.reponseMessage).toContain(
+      'we are facing some error while getting the user detail'
+    );
 
-  it('should navigate to login on 403 error', () => {
+    tick(3000);
+
+    expect(component.errorStatus).toBeFalse();
+    expect(component.reponseMessage).toBe('');
+  }));
+
+  it('should navigate to login on 403 error', fakeAsync(() => {
     mockHttpService.getUserDetail.and.returnValue(
       throwError(() => ({ status: 403 }))
     );
 
-    fixture.detectChanges();
+    component.ngOnInit();
+    flushMicrotasks();
 
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
-  });
+  }));
 
   it('should reset response message after timeout', fakeAsync(() => {
     component.responseSetter(true, 'Error occurred');

@@ -29,14 +29,32 @@
           <h2 class="text-zinc-100 font-semibold text-lg max-sm:text-center">
             Name
           </h2>
-          <p class="text-zinc-400 max-sm:text-center">
-            {{ userData.userName }}
-          </p>
+          <div
+            *ngIf="userData.userEmail == ''; else getUserName"
+            class="w-30 h-5 mt-2"
+          >
+            <app-skeleton-ui />
+          </div>
+          <ng-template #getUserName
+            ><p class="text-zinc-400 max-sm:text-center">
+              {{ userData.userName }}
+            </p>
+          </ng-template>
         </div>
-        <app-solid-button
-          buttonHeading="Change"
-          (clicked)="toggleShowEditorForUserName()"
-        />
+        <div *ngIf="userData.userEmail == ''; else getUserNameButton">
+          <app-solid-button
+            buttonHeading="Please wait"
+            (clicked)="toggleShowEditorForUserName()"
+            [buttonDisabled]="true"
+          />
+        </div>
+        <ng-template #getUserNameButton>
+          <app-solid-button
+            buttonHeading="Change"
+            (clicked)="toggleShowEditorForUserName()"
+            [buttonDisabled]="false"
+          />
+        </ng-template>
       </div>
       <div
         id="field_2_email"
@@ -46,19 +64,37 @@
           <h2 class="text-zinc-100 font-semibold text-lg max-sm:text-center">
             Email
           </h2>
-          <p class="text-zinc-400 max-sm:text-center">
-            {{ userData.userEmail }}
-          </p>
+          <div
+            *ngIf="userData.userEmail == ''; else getUserEmail"
+            class="w-30 h-5 mt-2"
+          >
+            <app-skeleton-ui />
+          </div>
+          <ng-template #getUserEmail
+            ><p class="text-zinc-400 max-sm:text-center">
+              {{ userData.userEmail }}
+            </p>
+          </ng-template>
         </div>
-        <app-solid-button
-          buttonHeading="Change"
-          (clicked)="toggleShowEditorForUserEmail()"
-        />
+        <div *ngIf="userData.userEmail == ''; else getUserEmailButton">
+          <app-solid-button
+            buttonHeading="Please wait"
+            (clicked)="toggleShowEditorForUserEmail()"
+            [buttonDisabled]="true"
+          />
+        </div>
+        <ng-template #getUserEmailButton
+          ><app-solid-button
+            buttonHeading="Change"
+            (clicked)="toggleShowEditorForUserEmail()"
+            [buttonDisabled]="false"
+          />
+        </ng-template>
       </div>
 
       <div
         id="field_3_password"
-        class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-4 flex justify-between items-center hover:border-[#66aa6e] transition flex-wrap max-sm:justify-center"
+        class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-4 flex justify-between items-center hover:border-[#66aa6e] transition flex-wrap max-sm:justify-center select-none opacity-20"
       >
         <div class="flex flex-col">
           <h2 class="text-zinc-100 font-semibold text-lg max-sm:text-center">
@@ -67,8 +103,9 @@
           <p class="text-zinc-400 max-sm:text-center"></p>
         </div>
         <app-solid-button
-          buttonHeading="Change"
+          buttonHeading="Feature unavilabe"
           (clicked)="toggleShowEditorForUserPassword()"
+          [buttonDisabled]="true"
         />
       </div>
     </div>

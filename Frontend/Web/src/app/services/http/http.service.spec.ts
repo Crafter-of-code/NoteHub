@@ -158,4 +158,17 @@ describe('HttpService', () => {
 
     req.flush({ message: 'updated' });
   });
+  it('should return server status as text', () => {
+    const mockResponse = 'Hello and welcome to NoteHub';
+
+    service.getServerStatus().subscribe((res) => {
+      expect(res).toBe(mockResponse);
+    });
+
+    const req = httpMock.expectOne(`${service.defaultRoute}/welcome`);
+
+    expect(req.request.method).toBe('GET');
+
+    req.flush(mockResponse);
+  });
 });

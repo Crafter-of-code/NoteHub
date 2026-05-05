@@ -8,6 +8,7 @@ import { HttpService } from '../../services/http/http.service';
 import { SolidButtonComponent } from '../../components/solid-button/solid-button.component';
 import { AddNoteComponent } from '../../components/add-edit-note/add-note.component';
 import { ResponseStatusComponent } from '../../components/response-status/response-status.component';
+import { SkeletonUiComponent } from '../../components/skeleton-ui/skeleton-ui.component';
 @Component({
   selector: 'app-home',
   imports: [
@@ -15,6 +16,7 @@ import { ResponseStatusComponent } from '../../components/response-status/respon
     SolidButtonComponent,
     AddNoteComponent,
     ResponseStatusComponent,
+    SkeletonUiComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
@@ -30,6 +32,7 @@ export class HomeComponent implements OnInit {
   userId: string | null = '';
   allNotes: notesDataType = [];
   button_button_icon = '/asset/add.png';
+  noteLoading: boolean = true;
   constructor(
     private nav: Router,
     private seo: SetSeoService,
@@ -52,6 +55,10 @@ export class HomeComponent implements OnInit {
           this.errorStatus = false;
           this.reponseMessage = '';
         }, 2000);
+      },
+      complete: () => {
+        console.log('operation complete');
+        this.noteLoading = false;
       },
     });
   }

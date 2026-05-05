@@ -8,7 +8,7 @@ export class ButtonHandlersService {
   constructor(private router: Router) {}
   initizalHeaderButton: boolean = false;
   goToLoginPage() {
-    this.router.navigate(['login'], { replaceUrl: true });
+    this.router.navigate(['login']);
   }
   goToSiginPage() {
     this.router.navigate(['signin']);

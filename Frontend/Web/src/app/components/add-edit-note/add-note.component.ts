@@ -4,10 +4,16 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { OutlineButtonComponent } from '../outline-button/outline-button.component';
 import { HttpService } from '../../services/http/http.service';
 import { addNoteDataType, responseDataType } from '../../types/dataTypes';
+import { SkeletonUiComponent } from '../skeleton-ui/skeleton-ui.component';
 
 @Component({
   selector: 'app-add-edit-note',
-  imports: [CommonModule, FormsModule, OutlineButtonComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    OutlineButtonComponent,
+    SkeletonUiComponent,
+  ],
   templateUrl: './add-edit-note.component.html',
 })
 export class AddNoteComponent implements OnInit {

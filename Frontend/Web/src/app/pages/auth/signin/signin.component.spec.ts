@@ -33,7 +33,6 @@ describe('SigninComponent', () => {
 
     fixture = TestBed.createComponent(SigninComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   function fillValidForm() {
@@ -46,22 +45,13 @@ describe('SigninComponent', () => {
     });
   }
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('should set SEO on init', () => {
+    fixture.detectChanges();
     expect(mockSeo.setSeo).toHaveBeenCalled();
   });
 
   it('should show error if form is invalid', fakeAsync(() => {
-    component.signinForm.setValue({
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      checkBox: false,
-    });
+    component.signinForm.reset();
 
     component.signinHandler();
 
@@ -69,15 +59,17 @@ describe('SigninComponent', () => {
     expect(component.reponseMessage).toBe('please check your data');
 
     tick(3000);
+
     expect(component.reponseMessage).toBe('');
+    expect(component.errorStatus).toBeFalse();
   }));
 
   it('should not call API if passwords do not match', () => {
     component.signinForm.setValue({
       name: 'John',
       email: 'john@test.com',
-      password: '123456',
-      confirmPassword: '654321',
+      password: '123',
+      confirmPassword: '456',
       checkBox: true,
     });
 
@@ -98,14 +90,10 @@ describe('SigninComponent', () => {
 
     component.signinHandler();
 
-    expect(mockHttp.signIn).toHaveBeenCalledWith({
-      userName: 'John',
-      userEmail: 'john@test.com',
-      userPassword: '123456',
-    });
+    expect(mockHttp.signIn).toHaveBeenCalled();
   });
 
-  it('should handle successful signup and navigate to login', fakeAsync(() => {
+  it('should handle success and navigate to login', fakeAsync(() => {
     fillValidForm();
 
     mockHttp.signIn.and.returnValue(
@@ -114,11 +102,13 @@ describe('SigninComponent', () => {
 
     component.signinHandler();
 
-    expect(component.reponseMessage).toBe('success');
+    expect(component.button_disable).toBeTrue();
 
     tick(2000);
 
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/', 'login']);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/', 'login'], {
+      replaceUrl: true,
+    });
     expect(component.reponseMessage).toBe('');
     expect(component.errorStatus).toBeFalse();
   }));

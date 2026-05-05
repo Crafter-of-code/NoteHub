@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect, signal, WritableSignal } from '@angular/core';
 import { TypewritterComponent } from '../../components/typewritter/typewritter.component';
 import { SolidButtonComponent } from '../../components/solid-button/solid-button.component';
 import { OutlineButtonComponent } from '../../components/outline-button/outline-button.component';
@@ -7,14 +7,27 @@ import { OnInit } from '@angular/core';
 import { SetSeoService } from '../../services/seo/set-seo.service';
 import { appHeading } from '../../constants/appDetails';
 import { ButtonHandlersService } from '../../services/ButtonHandlers/button-handlers.service';
+import { single } from 'rxjs';
+import { HttpService } from '../../services/http/http.service';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-welcome',
-  imports: [TypewritterComponent, SolidButtonComponent, OutlineButtonComponent],
+  imports: [
+    TypewritterComponent,
+    SolidButtonComponent,
+    OutlineButtonComponent,
+    CommonModule,
+  ],
   templateUrl: './welcome.component.html',
   styleUrl: './welcome.component.css',
 })
 export class WelcomeComponent implements OnInit {
+  serverCheckButtonStatus: WritableSignal<boolean> = signal<boolean>(true);
+  reverseCounting: WritableSignal<number> = signal<number>(50);
+  loginButtonHeading = 'Please Wait';
+  signinButtonHeading = 'Please Wait';
   constructor(
+    private http: HttpService,
     private router: Router,
     private seo: SetSeoService,
     private buttonEvent: ButtonHandlersService,
@@ -32,6 +45,24 @@ export class WelcomeComponent implements OnInit {
     if (localStorage.getItem('token')) {
       this.route.navigate(['/', 'home'], { replaceUrl: true });
     }
+    this.getServerStatus();
+  }
+  getServerStatus() {
+    this.http.getServerStatus().subscribe({
+      next: (data) => {
+        this.loginButtonHeading = 'Login';
+        this.signinButtonHeading = 'Creaet a new Account';
+        this.serverCheckButtonStatus.set(false);
+      },
+      error: (err) => {
+        this.loginButtonHeading = '503 Service Unavailable';
+        this.signinButtonHeading = 'Try later';
+        console.log(err);
+      },
+      complete: () => {
+        console.log('compelted');
+      },
+    });
   }
   loginButtonHandler = () => {
     this.buttonEvent.goToLoginPage();

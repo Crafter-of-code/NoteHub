@@ -4,40 +4,68 @@
     #noteForm="ngForm"
     (ngSubmit)="addOrEditHandler(noteForm)"
   >
-    <h2 class="text-3xl font-semibold text-center text-zinc-100 mb-6">
-      {{ formHeading }}
-    </h2>
+    <div
+      *ngIf="
+        isEditingMode && noteData?.noteTitle == '';
+        else formHeadingAfterLoading
+      "
+    ></div>
+    <ng-template #formHeadingAfterLoading>
+      <h2 class="text-3xl font-semibold text-center text-zinc-100 mb-6">
+        {{ formHeading }}
+      </h2></ng-template
+    >
 
-    <!-- Username -->
-    <div class="relative">
-      <input
-        type="text"
-        placeholder="Title"
-        name="noteTitle"
-        [(ngModel)]="noteData.noteTitle"
-        required
-        class="w-full px-4 py-3 rounded-md bg-zinc-950 border border-zinc-800 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#66aa6e] focus:border-[#66aa6e] transition"
-      />
+    <div
+      *ngIf="isEditingMode && noteData?.noteTitle == ''; else noteDataFetched"
+      class="w-full h-40"
+    >
+      <app-skeleton-ui />
     </div>
-    <div class="relative">
-      <textarea
-        rows="6"
-        cols="40"
-        placeholder="Write you content here"
-        name="noteContent"
-        [(ngModel)]="noteData.noteContent"
-        required
-        class="w-full px-4 py-3 rounded-md bg-zinc-950 border border-zinc-800 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#66aa6e] focus:border-[#66aa6e] transition resize-y overflow-hidden"
-      ></textarea>
-    </div>
+    <ng-template #noteDataFetched>
+      <!-- Username -->
+      <div class="relative">
+        <input
+          type="text"
+          placeholder="Title"
+          name="noteTitle"
+          [(ngModel)]="noteData.noteTitle"
+          required
+          class="w-full px-4 py-3 rounded-md bg-zinc-950 border border-zinc-800 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#66aa6e] focus:border-[#66aa6e] transition"
+        />
+      </div>
+      <div class="relative">
+        <textarea
+          rows="6"
+          cols="40"
+          placeholder="Write you content here"
+          name="noteContent"
+          [(ngModel)]="noteData.noteContent"
+          required
+          class="w-full px-4 py-3 rounded-md bg-zinc-950 border border-zinc-800 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#66aa6e] focus:border-[#66aa6e] transition resize-y overflow-hidden"
+        ></textarea>
+      </div>
+    </ng-template>
 
     <!-- Submit Button -->
-    <div class="mt-4" *ngIf="noteForm.valid">
-      <app-outline-button
-        [buttonHeading]="buttonHeading"
-        class="w-full"
-        [disabled]="buttonDisabled"
-      ></app-outline-button>
+
+    <div
+      *ngIf="
+        isEditingMode && noteData.noteTitle.trim() === '';
+        else displayButton
+      "
+      class="w-full h-fit"
+    >
+      <app-skeleton-ui />
     </div>
+
+    <ng-template #displayButton>
+      <div class="mt-4" *ngIf="noteForm.valid">
+        <app-outline-button
+          [buttonHeading]="buttonHeading"
+          class="w-full"
+          [disabled]="buttonDisabled"
+        ></app-outline-button></div
+    ></ng-template>
   </form>
 </div>

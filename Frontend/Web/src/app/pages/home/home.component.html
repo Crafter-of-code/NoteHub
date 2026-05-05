@@ -16,52 +16,57 @@
   <main
     class="min-h-[calc(90vh-1.1rem)] px-4 py-6 bg-linear-to-br from-zinc-950 via-zinc-900 to-black text-zinc-100"
   >
-    <div
-      *ngIf="allNotes?.length === 0; else notesGrid"
-      class="flex items-center justify-center h-[calc(90vh-6rem)]"
-    >
-      <h1 class="text-xl tracking-wide text-zinc-400 select-none text-center">
-        You have no notes right now
-      </h1>
+    <div class="w-full h-20" *ngIf="noteLoading; else noteLoaded">
+      <app-skeleton-ui />
     </div>
-    <ng-template #notesGrid>
+    <ng-template #noteLoaded>
       <div
-        class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6 space-y-6"
+        *ngIf="allNotes?.length === 0; else notesGrid"
+        class="flex items-center justify-center h-[calc(90vh-6rem)]"
       >
+        <h1 class="text-xl tracking-wide text-zinc-400 select-none text-center">
+          You have no notes right now
+        </h1>
+      </div>
+      <ng-template #notesGrid>
         <div
-          *ngFor="let note of allNotes"
-          class="relative break-inside-avoid bg-zinc-900 border border-zinc-800 rounded-lg p-5 hover:border-[#66aa6e] transition cursor-pointer shadow-sm"
+          class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6 space-y-6"
         >
-          <div class="absolute top-2 right-2 flex gap-2">
-            <button
-              (click)="editButtonHandler(note.noteId)"
-              class="w-6 h-6 flex items-center justify-center rounded-md hover:bg-zinc-800 transition"
-              type="button"
-              aria-label="click to edit"
-            >
-              <img [src]="editIcon" alt="Edit" class="w-4 h-4" />
-            </button>
-            <button
-              class="w-6 h-6 flex items-center justify-center rounded-md hover:bg-zinc-800 transition"
-              type="button"
-              aria-label="click to delete"
-              (click)="deleteButtonHandler(note.noteId)"
-            >
-              <img [src]="deleteIcon" alt="Delete" class="w-6 h-6" />
-            </button>
-          </div>
-          <div class="flex flex-col gap-2">
-            <span class="text-sm text-zinc-400"></span>
-            <h2 class="text-lg font-semibold text-zinc-100">
-              {{ note.noteTitle }}
-            </h2>
-            <p class="text-zinc-300 text-sm whitespace-pre-line">
-              {{ note.noteContent }}
-            </p>
+          <div
+            *ngFor="let note of allNotes"
+            class="relative break-inside-avoid bg-zinc-900 border border-zinc-800 rounded-lg p-5 hover:border-[#66aa6e] transition cursor-pointer shadow-sm"
+          >
+            <div class="absolute top-2 right-2 flex gap-2">
+              <button
+                (click)="editButtonHandler(note.noteId)"
+                class="w-6 h-6 flex items-center justify-center rounded-md hover:bg-zinc-800 transition"
+                type="button"
+                aria-label="click to edit"
+              >
+                <img [src]="editIcon" alt="Edit" class="w-4 h-4" />
+              </button>
+              <button
+                class="w-6 h-6 flex items-center justify-center rounded-md hover:bg-zinc-800 transition"
+                type="button"
+                aria-label="click to delete"
+                (click)="deleteButtonHandler(note.noteId)"
+              >
+                <img [src]="deleteIcon" alt="Delete" class="w-6 h-6" />
+              </button>
+            </div>
+            <div class="flex flex-col gap-2">
+              <span class="text-sm text-zinc-400"></span>
+              <h2 class="text-lg font-semibold text-zinc-100">
+                {{ note.noteTitle }}
+              </h2>
+              <p class="text-zinc-300 text-sm whitespace-pre-line">
+                {{ note.noteContent }}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-    </ng-template>
+      </ng-template></ng-template
+    >
   </main></ng-template
 >
 <!-- this is use to toggel the screen-->

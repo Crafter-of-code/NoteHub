@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { UserDetailEditorComponent } from '../../components/user-detail-editor/user-detail-editor.component';
 import { Router } from '@angular/router';
 import { ResponseStatusComponent } from '../../components/response-status/response-status.component';
+import { SkeletonUiComponent } from '../../components/skeleton-ui/skeleton-ui.component';
 @Component({
   selector: 'app-setting',
   imports: [
@@ -14,6 +15,7 @@ import { ResponseStatusComponent } from '../../components/response-status/respon
     CommonModule,
     UserDetailEditorComponent,
     ResponseStatusComponent,
+    SkeletonUiComponent,
   ],
   templateUrl: './setting.component.html',
   styleUrl: './setting.component.css',

@@ -7,6 +7,7 @@ import {
   singleNoteDataType,
   userDataFromServer,
 } from '../../types/dataTypes';
+import { Observable } from 'rxjs';
 
 type loginSeccessesMessage = {
   message: string;
@@ -15,8 +16,8 @@ type loginSeccessesMessage = {
   providedIn: 'root',
 })
 export class HttpService {
-  // defaultRoute: string = 'http://localhost:8080/api';
-  defaultRoute: string = 'https://backend-notehub-com.onrender.com/api';
+  defaultRoute: string = 'http://localhost:8080/api';
+  // defaultRoute: string = 'https://backend-notehub-com.onrender.com/api';
   constructor(
     private http: HttpClient,
     private activatedRoute: ActivatedRoute
@@ -26,6 +27,11 @@ export class HttpService {
   }
   logIn(data: { userEmail: string; userPassword: string }) {
     return this.http.post<responseDataType>(`${this.defaultRoute}/login`, data);
+  }
+  getServerStatus(): Observable<string> {
+    return this.http.get(`${this.defaultRoute}/welcome`, {
+      responseType: 'text',
+    });
   }
   getHomeData() {
     // const authheaders = new HttpHeaders({

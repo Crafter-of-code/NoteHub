@@ -22,6 +22,7 @@ import { ResponseStatusComponent } from '../../../components/response-status/res
 export class LoginComponent {
   errorStatus = false;
   reponseMessage = '';
+  loginButtonDisable: boolean = false;
   constructor(
     private seo: SetSeoService,
     private http: HttpService,
@@ -34,6 +35,8 @@ export class LoginComponent {
     this.seo.setSeo(loginPageSeo);
   }
   loginHandler(userForm: NgForm) {
+    this.loginButtonDisable = true;
+    console.log('button disabled' + this.loginButtonDisable);
     if (userForm.valid) {
       const data = {
         userEmail: userForm.value.userEmail,
@@ -45,24 +48,30 @@ export class LoginComponent {
             localStorage.setItem('token', `Bearer ${data.token}`);
             this.reponseMessage = data.message || '';
             this.errorStatus = data.errorStatus ?? false;
+
             setTimeout(() => {
-              return this.route.navigate(['home']);
-            }, 2000);
+              this.loginButtonDisable = false;
+              this.route.navigate(['home']);
+            }, 1000);
           } else {
             this.reponseMessage = data.message || '';
             this.errorStatus = data.errorStatus || false;
+
             setTimeout(() => {
               this.errorStatus = false;
               this.reponseMessage = '';
+              this.loginButtonDisable = false;
             }, 2000);
           }
         },
-        error: (err) => {
+        error: () => {
           this.reponseMessage = 'unable to communitcate to our backend service';
           this.errorStatus = true;
+
           setTimeout(() => {
             this.errorStatus = false;
             this.reponseMessage = '';
+            this.loginButtonDisable = false;
           }, 2000);
         },
       });
@@ -72,6 +81,7 @@ export class LoginComponent {
       setTimeout(() => {
         this.reponseMessage = '';
       }, 3000);
+      this.loginButtonDisable = false;
     }
   }
 }
