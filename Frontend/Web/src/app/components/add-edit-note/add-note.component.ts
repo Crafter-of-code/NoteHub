@@ -24,6 +24,7 @@ export class AddNoteComponent implements OnInit {
   @Input() showAddEditNote: boolean = true;
   @Output() toggelAddEditNoteShow = new EventEmitter<void>();
   @Output() responseStatusEmitter = new EventEmitter<responseDataType>();
+  skeletonUiLoading: boolean = true;
   buttonDisabled: boolean = false;
   noteData = {
     noteTitle: '',
@@ -32,12 +33,14 @@ export class AddNoteComponent implements OnInit {
   constructor(private http: HttpService) {}
   ngOnInit(): void {
     if (this.isEditingMode) {
+      this.skeletonUiLoading = true;
       this.formHeading = 'Want to make some updates';
       this.buttonHeading = 'Press to update';
       this.http.getSingleNote(this.noteId).subscribe({
         next: (data) => {
           this.noteData.noteTitle = data.noteTitle;
           this.noteData.noteContent = data.noteContent;
+          this.skeletonUiLoading = false;
         },
         error: (err) => {
           this.toggelAddEditNoteShow.emit();
@@ -48,6 +51,7 @@ export class AddNoteComponent implements OnInit {
         },
       });
     } else {
+      this.skeletonUiLoading = false;
       this.formHeading = 'Want to add new notes';
     }
   }

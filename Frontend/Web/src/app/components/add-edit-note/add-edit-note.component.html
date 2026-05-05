@@ -4,22 +4,14 @@
     #noteForm="ngForm"
     (ngSubmit)="addOrEditHandler(noteForm)"
   >
-    <div
-      *ngIf="
-        isEditingMode && noteData?.noteTitle == '';
-        else formHeadingAfterLoading
-      "
-    ></div>
+    <div *ngIf="skeletonUiLoading; else formHeadingAfterLoading"></div>
     <ng-template #formHeadingAfterLoading>
       <h2 class="text-3xl font-semibold text-center text-zinc-100 mb-6">
         {{ formHeading }}
       </h2></ng-template
     >
 
-    <div
-      *ngIf="isEditingMode && noteData?.noteTitle == ''; else noteDataFetched"
-      class="w-full h-40"
-    >
+    <div *ngIf="skeletonUiLoading; else noteDataFetched" class="w-full h-40">
       <app-skeleton-ui />
     </div>
     <ng-template #noteDataFetched>
@@ -49,13 +41,7 @@
 
     <!-- Submit Button -->
 
-    <div
-      *ngIf="
-        isEditingMode && noteData.noteTitle.trim() === '';
-        else displayButton
-      "
-      class="w-full h-fit"
-    >
+    <div *ngIf="skeletonUiLoading; else displayButton" class="w-full h-fit">
       <app-skeleton-ui />
     </div>
 
